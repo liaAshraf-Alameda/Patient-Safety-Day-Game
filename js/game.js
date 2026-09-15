@@ -1,9 +1,10 @@
 // Game state
 let language = "ar";
-let currentStationIndex = 0;
+let currentQuestionIndex = 0;
 let safetyScore = 100;
 let trustScore = 100;
 let answeredCorrectly = 0;
+let selectedRole = null;
 
 let player = {
   name: "",
@@ -11,143 +12,421 @@ let player = {
   role: ""
 };
 
-// Game stations with questions
-const stations = [
-  {
-    name: "Reception",
-    emoji: "🏁",
-    question: "What is the first step when a patient arrives at the hospital?",
-    questionAr: "ما أول خطوة عند وصول المريض للمستشفى؟",
-    answers: [
-      { text: "Verify patient identity and check-in", textAr: "التحقق من هوية المريض والتسجيل", correct: true },
-      { text: "Send them directly to the ward", textAr: "إرساله مباشرة للقسم", correct: false },
-      { text: "Take blood samples immediately", textAr: "أخذ عينات دم فوراً", correct: false },
-      { text: "Give medication immediately", textAr: "إعطاء الدواء فوراً", correct: false }
-    ]
-  },
-  {
-    name: "Outpatient Clinic",
-    emoji: "⚕️",
-    question: "What should a doctor do before prescribing medication?",
-    questionAr: "ماذا يجب على الطبيب أن يفعل قبل وصف الدواء؟",
-    answers: [
-      { text: "Take a complete medical history", textAr: "أخذ التاريخ الطبي الكامل", correct: true },
-      { text: "Prescribe without checking", textAr: "وصف الدواء دون فحص", correct: false },
-      { text: "Ask the patient's age only", textAr: "السؤال عن العمر فقط", correct: false },
-      { text: "Use the same medication for everyone", textAr: "استخدام نفس الدواء للجميع", correct: false }
-    ]
-  },
-  {
-    name: "Laboratory",
-    emoji: "🧪",
-    question: "What is crucial for accurate laboratory results?",
-    questionAr: "ما الذي يجب التأكد منه لنتائج دقيقة في المختبر؟",
-    answers: [
-      { text: "Proper sample labeling and handling", textAr: "وضع العلامات المناسبة على العينة", correct: true },
-      { text: "Speed over accuracy", textAr: "السرعة على حساب الدقة", correct: false },
-      { text: "Mixing samples from different patients", textAr: "خلط العينات من مرضى مختلفين", correct: false },
-      { text: "Ignoring expiration dates", textAr: "تجاهل تواريخ الانتهاء", correct: false }
-    ]
-  },
-  {
-    name: "Radiology",
-    emoji: "🩻",
-    question: "What should be done before X-ray procedures?",
-    questionAr: "ما الذي يجب فعله قبل إجراء صور الأشعة؟",
-    answers: [
-      { text: "Verify patient ID and check for contraindications", textAr: "التحقق من هوية المريض والتحقق من الموانع", correct: true },
-      { text: "Expose without protection", textAr: "التعرض للأشعة بدون حماية", correct: false },
-      { text: "Repeat scans unnecessarily", textAr: "تكرار الفحوصات غير الضرورية", correct: false },
-      { text: "Ignore pregnancy warnings", textAr: "تجاهل تحذيرات الحمل", correct: false }
-    ]
-  },
-  {
-    name: "Pharmacy",
-    emoji: "💊",
-    question: "What is critical in pharmacy operations?",
-    questionAr: "ما الذي يجب التركيز عليه في الصيدلية؟",
-    answers: [
-      { text: "Check drug interactions and allergies", textAr: "التحقق من التفاعلات والحساسيات", correct: true },
-      { text: "Dispense without verification", textAr: "صرف الدواء بدون تحقق", correct: false },
-      { text: "Mix different medications randomly", textAr: "خلط الأدوية عشوائياً", correct: false },
-      { text: "Ignore storage conditions", textAr: "تجاهل شروط التخزين", correct: false }
-    ]
-  },
-  {
-    name: "Admission",
-    emoji: "📝",
-    question: "What is essential during patient admission?",
-    questionAr: "ما الضروري أثناء قبول المريض؟",
-    answers: [
-      { text: "Complete documentation and consent forms", textAr: "التوثيق الكامل والموافقات", correct: true },
-      { text: "Skip paperwork to save time", textAr: "تخطي الأوراق لتوفير الوقت", correct: false },
-      { text: "Don't inform about procedures", textAr: "عدم إبلاغ المريض بالإجراءات", correct: false },
-      { text: "Ignore patient preferences", textAr: "تجاهل تفضيلات المريض", correct: false }
-    ]
-  },
-  {
-    name: "Ward",
-    emoji: "🛏️",
-    question: "What is the priority in patient ward care?",
-    questionAr: "ما هي الأولوية في رعاية المريض بالقسم؟",
-    answers: [
-      { text: "Regular monitoring and timely medication", textAr: "المراقبة المنتظمة والأدوية في الوقت المحدد", correct: true },
-      { text: "Minimize check-ins to save time", textAr: "تقليل الفحوصات لتوفير الوقت", correct: false },
-      { text: "Ignore vital signs", textAr: "تجاهل العلامات الحيوية", correct: false },
-      { text: "Delay medication administration", textAr: "تأخير الأدوية", correct: false }
-    ]
-  },
-  {
-    name: "Nutrition",
-    emoji: "🍽️",
-    question: "What should nutrition staff consider?",
-    questionAr: "ما الذي يجب على موظفي التغذية أن يراعوه؟",
-    answers: [
-      { text: "Patient dietary restrictions and allergies", textAr: "القيود الغذائية والحساسيات", correct: true },
-      { text: "Serve any food without checking", textAr: "تقديم أي طعام بدون فحص", correct: false },
-      { text: "Ignore medical dietary needs", textAr: "تجاهل احتياجات النظام الغذائي", correct: false },
-      { text: "Use expired ingredients", textAr: "استخدام مكونات منتهية الصلاحية", correct: false }
-    ]
-  },
-  {
-    name: "Housekeeping",
-    emoji: "🧹",
-    question: "Why is hospital cleanliness important?",
-    questionAr: "لماذا تنظيف المستشفى مهم؟",
-    answers: [
-      { text: "To prevent infections and disease spread", textAr: "لمنع العدوى والأمراض", correct: true },
-      { text: "Just for appearance", textAr: "للمظهر فقط", correct: false },
-      { text: "Cleaning is not important", textAr: "التنظيف غير مهم", correct: false },
-      { text: "Use harsh chemicals without care", textAr: "استخدام مواد كيميائية قاسية", correct: false }
-    ]
-  },
-  {
-    name: "Maintenance",
-    emoji: "🔧",
-    question: "What is critical for maintenance staff?",
-    questionAr: "ما الذي يجب أن يركز عليه موظفو الصيانة؟",
-    answers: [
-      { text: "Regular equipment maintenance and safety checks", textAr: "صيانة دورية وفحوصات الأمان", correct: true },
-      { text: "Ignore equipment problems", textAr: "تجاهل مشاكل المعدات", correct: false },
-      { text: "Skip safety protocols", textAr: "تخطي بروتوكولات الأمان", correct: false },
-      { text: "Use unsafe tools and methods", textAr: "استخدام أدوات غير آمنة", correct: false }
-    ]
-  },
-  {
-    name: "Discharge",
-    emoji: "🏠",
-    question: "What should be included in discharge planning?",
-    questionAr: "ما الذي يجب تضمينه في خطة الخروج؟",
-    answers: [
-      { text: "Clear instructions and follow-up appointments", textAr: "تعليمات واضحة ومواعيد المتابعة", correct: true },
-      { text: "Send patient home without instructions", textAr: "إرسال المريض بدون تعليمات", correct: false },
-      { text: "No follow-up care needed", textAr: "لا توجد متابعة ضرورية", correct: false },
-      { text: "Avoid counseling and education", textAr: "تجنب الاستشارة والتثقيف", correct: false }
-    ]
-  }
-];
+/**
+ * Comprehensive question database organized by role
+ */
+const questions = {
+  Doctor: [
+    {
+      station: "Clinic",
+      question: "نسي عم سمير قائمة أدويته الحالية. ما أفضل إجراء؟",
+      options: ["مراجعة الملف الطبي المتاح", "مراجعة جميع الأدوية الحالية مع المريض وأسرته", "سؤال المريض عن الأدوية التي يتذكرها"],
+      correct: 1,
+      explanation: "Medication Reconciliation أفضل ممارسة لسلامة المريض.",
+      voice: "من فضلك راجع جميع أدويتي."
+    },
+    {
+      station: "Consultation",
+      question: "المريض لا يفهم التشخيص.",
+      options: ["تزويد المريض بمواد تثقيفية", "شرح الحالة بلغة بسيطة والتأكد من فهمه", "تحديد موعد متابعة لمناقشة الحالة"],
+      correct: 1,
+      explanation: "إشراك المريض يبدأ بالفهم.",
+      voice: "من فضلك اشرح حالتي."
+    }
+  ],
+  Nurse: [
+    {
+      station: "Ward",
+      question: "المريض يشعر بالدوخة عند الوقوف.",
+      options: ["تذكير المريض بطلب المساعدة", "تقييم خطر السقوط وتطبيق الوقاية", "إبلاغ الطبيب"],
+      correct: 1,
+      explanation: "تقييم خطر السقوط هو الإجراء الأكثر أماناً.",
+      voice: "أخشى السقوط."
+    }
+  ],
+  Pharmacist: [
+    {
+      station: "Pharmacy",
+      question: "قبل صرف الدواء.",
+      options: ["مراجعة الوصفة", "التحقق من الهوية باستخدام معرفين", "مراجعة السجل الدوائي"],
+      correct: 1,
+      explanation: "التحقق من الهوية يمنع الأخطاء الدوائية.",
+      voice: "هذا دوائي؟"
+    }
+  ],
+  Kitchen: [
+    {
+      station: "Nutrition",
+      question: "مريض السكري طلب وجبة إضافية.",
+      options: ["مراجعة احتياجاته الغذائية", "توفير خيار يتوافق مع الخطة الغذائية العلاجية", "التنسيق مع التمريض بشأن الطلب"],
+      correct: 1,
+      explanation: "الخطة الغذائية العلاجية يجب أن تدعم السيطرة على المرض المزمن.",
+      voice: "ساعدوني في اختيار الطعام المناسب."
+    },
+    {
+      station: "Nutrition",
+      question: "يوجد تحسس غذائي موثق للمريض.",
+      options: ["مراجعة مكونات الوجبة", "التأكد من خلو الوجبة من المادة المسببة للتحسس", "مراجعة تفضيلات المريض الغذائية"],
+      correct: 1,
+      explanation: "منع التعرض لمسببات الحساسية يقلل المخاطر بشكل كبير.",
+      voice: "لدي حساسية غذائية."
+    },
+    {
+      station: "Nutrition",
+      question: "وصلت وجبة إلى مريض مختلف.",
+      options: ["مراجعة رقم ��لغرفة", "مطابقة هوية المريض قبل تسليم الوجبة", "الرجوع إلى قائمة الوجبات"],
+      correct: 1,
+      explanation: "مطابقة هوية المريض تمنع الأخطاء الغذائية.",
+      voice: "أريد الوجبة المخصصة لي."
+    },
+    {
+      station: "Nutrition",
+      question: "درجة حرارة الطعام غير مناسبة.",
+      options: ["تقييم صلاحية الوجبة", "استبدال الوجبة وفق متطلبات سلامة الغذاء", "التواصل مع قسم التغذية"],
+      correct: 1,
+      explanation: "سلامة الغذاء تشمل تقديم الطعام بدرجة حرارة مناسبة.",
+      voice: "أريد طعاماً آمناً."
+    },
+    {
+      station: "Nutrition",
+      question: "المريض يعاني من صعوبة البلع.",
+      options: ["متابعة استهلاك الوجبة", "إبلاغ الفريق المعالج وتعديل الخطة الغذائية", "مراجعة تفضيلات الطعام"],
+      correct: 1,
+      explanation: "صعوبة البلع تزيد خطر الاختناق والشفط الرئوي.",
+      voice: "الأكل أصبح صعباً."
+    },
+    {
+      station: "Nutrition",
+      question: "المريض لا يتناول كامل وجبته.",
+      options: ["تسجيل كمية الطعام المستهلكة", "مناقشة الأسباب مع المريض وتعديل الخطة الغذائية", "طلب تقييم غذائي إضافي"],
+      correct: 1,
+      explanation: "فهم السبب يساعد في تحسين الحالة الغذائية.",
+      voice: "لا أستطيع إنهاء وجبتي."
+    },
+    {
+      station: "Nutrition",
+      question: "المريض يريد إحضار طعام من المنزل.",
+      options: ["مراجعة نوع الطعام", "تقييم توافق الطعام مع الخطة العلاجية", "توثيق الطلب"],
+      correct: 1,
+      explanation: "يجب التأكد من أن الطعام يدعم الخطة العلاجية.",
+      voice: "أفضل بعض الأطعمة من المنزل."
+    },
+    {
+      station: "Nutrition",
+      question: "المريض يعاني من ضعف الشهية.",
+      options: ["تسجيل الملاحظة", "إشراك أخصائي التغذية والمريض في الخطة الغذائية", "زيادة عدد الوجبات"],
+      correct: 1,
+      explanation: "التعاون مع المريض يحسن فرص الالتزام بالخطة.",
+      voice: "لا أشعر برغبة كبيرة في الطعام."
+    },
+    {
+      station: "Nutrition",
+      question: "تم تعديل الخطة الغذائية.",
+      options: ["إرسال الخطة للمريض", "شرح التعديل للمريض والتأكد من فهمه", "توثيق التعديل"],
+      correct: 1,
+      explanation: "فهم المريض للخطة جزء من الرعاية المتمركزة حوله.",
+      voice: "أريد معرفة سبب تغيير النظام الغذائي."
+    },
+    {
+      station: "Nutrition",
+      question: "المريض يستعد للخروج من المستشفى.",
+      options: ["تسليم تعليمات مكتوبة", "مراجعة التعليمات الغذائية وخطة المتابعة معه", "إعطاؤه موعداً للمتابعة"],
+      correct: 1,
+      explanation: "استمرار الرعاية بعد الخروج مهم لمرضى الأمراض المزمنة.",
+      voice: "كيف أستمر على النظام الغذائي في المنزل؟"
+    }
+  ],
+  Housekeeping: [
+    {
+      station: "Housekeeping",
+      question: "انسكب سائل في ممر المرضى.",
+      options: ["إبلاغ المشرف", "تأمين المنطقة وتنظيفها ووضع علامة تحذيرية", "جدولة التنظيف ضمن الأعمال الحالية"],
+      correct: 1,
+      explanation: "التدخل الفوري يقلل خطر السقوط.",
+      voice: "أريد بيئة آمنة."
+    },
+    {
+      station: "Housekeeping",
+      question: "سلة النفايات الطبية ممتلئة.",
+      options: ["متابعة مستوى الامتلاء", "استبدالها وفق السياسة المعتمدة", "إبلاغ القسم المعني"],
+      correct: 1,
+      explanation: "إدارة النفايات بشكل صحيح جزء من سلامة المرضى.",
+      voice: "حافظوا على البيئة آمنة."
+    },
+    {
+      station: "Housekeeping",
+      question: "بعد الانتهاء من تنظيف غرفة مريض.",
+      options: ["إزالة معدات التنظيف", "تطبيق نظافة اليدين وفق السياسة", "تجهيز المعدات للمهمة التالية"],
+      correct: 1,
+      explanation: "نظافة اليدين تقلل انتقال العدوى.",
+      voice: "احموني من العدوى."
+    },
+    {
+      station: "Housekeeping",
+      question: "يتم تنظيف غرفة تحت احتياطات العزل.",
+      options: ["مراجعة خطة التنظيف", "تطبيق احتياطات العزل أثناء التنظيف", "التنسيق مع الفريق"],
+      correct: 1,
+      explanation: "العزل يمنع انتقال العدوى داخل المستشفى.",
+      voice: "أحتاج إلى حماية إضافية."
+    },
+    {
+      station: "Housekeeping",
+      question: "تُستخدم أدوات تنظيف في عدة مناطق.",
+      options: ["فحص حالة الأدوات", "منع التلوث المتبادل بين المناطق", "تنظيم المعدات بالمستودع"],
+      correct: 1,
+      explanation: "منع انتقال الملوثات بين المناطق ضروري.",
+      voice: "أريد غرفة نظيفة وآمنة."
+    },
+    {
+      station: "Housekeeping",
+      question: "أبلغ مريض عن منطقة زلقة.",
+      options: ["تسجيل البلاغ", "تقييم الخطر ومعالجته فوراً", "مراجعة خطة التنظيف"],
+      correct: 1,
+      explanation: "إزالة الخطر بسرعة تمنع الحوادث.",
+      voice: "الممر غير آمن."
+    },
+    {
+      station: "Housekeeping",
+      question: "اكتشاف خطر بيئي داخل القسم.",
+      options: ["إبلاغ الإدارة", "الاستجابة الفورية وتقليل الخطر", "تسجيل ملاحظة بالموقع"],
+      correct: 1,
+      explanation: "سلامة البيئة جزء من سلامة الرعاية.",
+      voice: "أحتاج إلى بيئة آمنة."
+    },
+    {
+      station: "Housekeeping",
+      question: "غرفة عالية الخطورة بحاجة للتنظيف.",
+      options: ["بدء التنظيف", "التحقق من اكتمال التنظيف والتطهير حسب السياسة", "تغيير مواد التنظيف"],
+      correct: 1,
+      explanation: "المناطق عالية الخطورة تتطلب تحققاً إضافياً.",
+      voice: "أتوقع بيئة آمنة ونظيفة."
+    },
+    {
+      station: "Housekeeping",
+      question: "معدات تنظيف ملوثة.",
+      options: ["تنظيفها لاحقاً", "عزلها واستبدالها وفق السياسة", "تسجيل الملاحظة"],
+      correct: 1,
+      explanation: "استخدام أدوات ملوثة قد ينقل العدوى.",
+      voice: "حافظوا على نظافة المكان."
+    },
+    {
+      station: "Housekeeping",
+      question: "خطر متكرر في نفس الموقع.",
+      options: ["إبلاغ المشرف فقط", "الإبلاغ والمشاركة في إجراءات التحسين", "متابعة الملاحظة مستقبلاً"],
+      correct: 1,
+      explanation: "التحسين المستمر يمنع تكرار الحوادث.",
+      voice: "لا أريد تكرار المشكلة."
+    }
+  ],
+  Maintenance: [
+    {
+      station: "Maintenance",
+      question: "يوجد سلك كهربائي مكشوف بالممر.",
+      options: ["إبلاغ قسم الصيانة", "تأمين الخطر ومعالجة المشكلة فوراً", "إدراجه ضمن خطة العمل"],
+      correct: 1,
+      explanation: "إزالة الخطر الفوري تحمي المرضى والموظفين.",
+      voice: "أريد ممراً آمناً."
+    },
+    {
+      station: "Maintenance",
+      question: "فرامل سرير المريض لا تعمل.",
+      options: ["تقييم حالة السرير", "إصلاح السرير أو استبداله قبل الاستخدام", "متابعة البلاغ مع القسم"],
+      correct: 1,
+      explanation: "سرير غير آمن قد يؤدي إلى سقوط المريض.",
+      voice: "سريري يجب أن يكون آمناً."
+    },
+    {
+      station: "Maintenance",
+      question: "تم اكتشاف خلل في إنذار الحريق.",
+      options: ["جدولة الإصلاح", "إعادة النظام للعمل بأسرع وقت", "مراجعة سجل الصيانة"],
+      correct: 1,
+      explanation: "أنظمة الإنذار ضرورية للاستجابة للطوارئ.",
+      voice: "أريد مستشفى آمنة."
+    },
+    {
+      station: "Maintenance",
+      question: "الأرضية غير مستوية بمنطقة المرضى.",
+      options: ["تقييم المشكلة", "معالجة الخطر لمنع التعثر والسقوط", "مراجعة خطة الصيانة"],
+      correct: 1,
+      explanation: "منع السقوط من أولويات سلامة المرضى.",
+      voice: "أحتاج إلى ممر آمن."
+    },
+    {
+      station: "Maintenance",
+      question: "وصل موعد الصيانة الوقائية لجهاز طبي.",
+      options: ["مراجعة أداء الجهاز", "تنفيذ الصيانة الوقائية حسب الجدول", "التنسيق مع المستخدمين"],
+      correct: 1,
+      explanation: "الصيانة الوقائية تقلل الأعطال المفاجئة.",
+      voice: "أعتمد على الأجهزة بأمان."
+    },
+    {
+      station: "Maintenance",
+      question: "زر طلب المساعدة لا يعمل.",
+      options: ["مراجعة البلاغ", "إصلاح النظام فوراً لضمان إمكانية الاستخدام", "جدولة زيارة فنية"],
+      correct: 1,
+      explanation: "وسائل طلب المساعدة عنصر حيوي لسلامة المريض.",
+      voice: "قد أحتاج المساعدة في أي لحظة."
+    },
+    {
+      station: "Maintenance",
+      question: "عطل متكرر في جهاز طبي.",
+      options: ["إصلاح العطل الحالي", "تحليل السبب الجذري واتخاذ إجراء دائم", "متابعة أداء الجهاز"],
+      correct: 1,
+      explanation: "تحليل السبب الجذري يمنع تكرار المشكلة.",
+      voice: "أحتاج أجهزة موثوقة."
+    },
+    {
+      station: "Maintenance",
+      question: "حدث عطل في المصعد المستخدم لنقل المرضى.",
+      options: ["إغلاق المصعد", "إدارة الخطر وتأمين بديل آمن للمرضى", "تسجيل البلاغ"],
+      correct: 1,
+      explanation: "استمرارية الخدمة مهمة لسلامة المرضى.",
+      voice: "أحتاج التنقل بأمان."
+    },
+    {
+      station: "Maintenance",
+      question: "إضاءة الممرات غير كافية.",
+      options: ["فحص النظام", "إصلاح الإضاءة لمنع الحوادث", "إبلاغ الإدارة"],
+      correct: 1,
+      explanation: "الرؤية الواضحة تقلل خطر السقوط.",
+      voice: "الإضاءة تساعدني على الحركة بأمان."
+    },
+    {
+      station: "Maintenance",
+      question: "تم الانتهاء من صيانة جهاز طبي.",
+      options: ["إغلاق البلاغ", "التأكد من سلامة الجهاز قبل إعادته للاستخدام", "إبلاغ القسم"],
+      correct: 1,
+      explanation: "التحقق بعد الصيانة جزء من السلامة.",
+      voice: "أريد جهازاً آمناً وموثوقاً."
+    }
+  ],
+  Administration: [
+    {
+      station: "Registration",
+      question: "وصول المريض للتسجيل.",
+      options: ["مراجعة بيانات الموعد", "التحقق من الهوية باستخدام معرفين معتمدين", "مراجعة الملف الطبي السابق"],
+      correct: 1,
+      explanation: "التعريف الصحيح بالمريض من أهم عناصر سلامة المرضى.",
+      voice: "أريد التأكد من أنني المريض الصحيح."
+    },
+    {
+      station: "Patient Rights",
+      question: "المريض لا يعرف حقوقه أثناء تلقي الرعاية.",
+      options: ["تزويده بمعلومات عامة عن المستشفى", "شرح حقوق المرضى وطرق الحصول على الدعم", "توجيهه إلى مكتب علاقات المرضى"],
+      correct: 1,
+      explanation: "معرفة الحقوق تعزز مشاركة المريض في الرعاية.",
+      voice: "أريد معرفة حقوقي داخل المستشفى."
+    },
+    {
+      station: "Complaint Management",
+      question: "تم استلام شكوى تتعلق بسلامة المرضى.",
+      options: ["توثيق الشكوى في النظام", "التحقيق في الأسباب واتخاذ إجراءات تحسين", "مشاركة الشكوى مع الإدارة المعنية"],
+      correct: 1,
+      explanation: "دراسة الشكاوى تساعد على تقليل المخاطر المستقبلية.",
+      voice: "أريد أن تؤخذ مخاوفي على محمل الجد."
+    },
+    {
+      station: "Shared Decision",
+      question: "المريض يرغب بالمشاركة في القرار العلاجي.",
+      options: ["تزويده بالمعلومات اللازمة", "إشراكه وأسرته في مناقشة الخيارات العلاجية", "توثيق رغبته بالمشاركة"],
+      correct: 1,
+      explanation: "الرعاية المتمركزة حول المريض تعتمد على المشاركة الفعلية.",
+      voice: "أريد أن أكون جزءاً من القرار."
+    },
+    {
+      station: "Communication",
+      question: "المريض يحتاج دعماً لغوياً لفهم الرعاية.",
+      options: ["توفير مواد مكتوبة مناسبة", "توفير وسيلة تواصل أو ترجمة فعالة", "التنسيق مع الفريق المسؤول"],
+      correct: 1,
+      explanation: "التواصل الفعال يقلل مخاطر سوء الفهم.",
+      voice: "ساعدوني على فهم الرعاية المقدمة لي."
+    },
+    {
+      station: "Test Results",
+      question: "يرغب المريض في الاطلاع على نتائج الفحوصات.",
+      options: ["تزويده بملخص للنتائج", "مراجعة النتائج معه وشرح معناها", "إتاحة نسخة من التقرير"],
+      correct: 1,
+      explanation: "فهم النتائج يساعد المريض على اتخاذ قرارات أفضل.",
+      voice: "أريد أن أفهم نتائج فحوصاتي."
+    },
+    {
+      station: "Transfer of Care",
+      question: "تم نقل المريض إلى قسم جديد.",
+      options: ["تحديث موقع المريض في النظام", "التأكد من اكتمال التواصل ونقل المعلومات للمريض والقسم الجديد", "إرسال إشعار للقسم المستقبل"],
+      correct: 1,
+      explanation: "استمرارية المعلومات عنصر أساسي لسلامة المرضى.",
+      voice: "أريد أن تكون جميع معلوماتي متاحة للفريق الجديد."
+    },
+    {
+      station: "Care Plan",
+      question: "طلب المريض نسخة من الخطة العلاجية.",
+      options: ["توفير ملخص للخطة", "تسليم نسخة وشرحها للمريض", "توثيق الطلب في الملف"],
+      correct: 1,
+      explanation: "فهم الخطة العلاجية يزيد الالتزام بالعلاج.",
+      voice: "أريد معرفة تفاصيل خطة علاجي."
+    },
+    {
+      station: "Follow-up",
+      question: "يواجه المريض صعوبة في حجز موعد متابعة.",
+      options: ["إبلاغ القسم المختص", "تسهيل الوصول للخدمة المناسبة", "إعطاؤه معلومات الاتصال"],
+      correct: 1,
+      explanation: "استمرارية الرعاية بعد الخروج عنصر مهم للمرضى المزمنين.",
+      voice: "أحتاج للوصول بسهولة إلى الرعاية."
+    },
+    {
+      station: "Coordination",
+      question: "المريض يحتاج دعماً إضافياً من أكثر من قسم.",
+      options: ["إبلاغ الأقسام المعنية", "تنسيق الرعاية بين الفرق المختلفة", "توثيق الحاجة في الملف"],
+      correct: 1,
+      explanation: "التنسيق الفعال يضمن رعاية متكاملة.",
+      voice: "أحتاج إلى فريق يعمل معي كوحدة واحدة."
+    }
+  ],
+  WHOChallenges: [
+    {
+      station: "WHO Gold Challenge",
+      question: "ما أفضل مؤشر على أن المريض أصبح شريكاً حقيقياً في الرعاية؟",
+      options: ["حضوره لجميع المواعيد", "مشاركته الفعلية في اتخاذ القرارات وفهم الخطة العلاجية", "استلامه مواد تثقيفية مكتوبة"],
+      correct: 1,
+      explanation: "الشراكة الحقيقية تعني مشاركة فعالة في القرارات المتعلقة بالرعاية.",
+      voice: "أريد أن يكون صوتي مسموعاً."
+    },
+    {
+      station: "WHO Gold Challenge",
+      question: "ما أهم وسيلة لتقليل الضرر أثناء رحلة المريض داخل المستشفى؟",
+      options: ["زيادة استخدام الأنظمة الإلكترونية", "التواصل الفعال وإشراك المريض", "زيادة عدد الإجراءات الرقابية"],
+      correct: 1,
+      explanation: "التواصل ومشاركة المريض من أكثر العوامل تأثيراً على سلامة المرضى.",
+      voice: "أريد أن أفهم ما يحدث لي في كل خطوة."
+    },
+    {
+      station: "WHO Gold Challenge",
+      question: "ما أهم عنصر في انتقال الرعاية الآمن بين الأقسام؟",
+      options: ["استخدام نماذج موحدة", "مشاركة المعلومات الأساسية وإشراك المريض", "إرسال الملف الطبي كاملاً"],
+      correct: 1,
+      explanation: "انتقال المعلومات الصحيحة ومشاركة المريض يقللان الأخطاء.",
+      voice: "أريد أن يعرف كل فريق حالتي بشكل صحيح."
+    },
+    {
+      station: "WHO Gold Challenge",
+      question: "ما أفضل وسيلة لتحسين نتائج مرضى الأمراض غير السارية؟",
+      options: ["زيادة عدد الزيارات الطبية", "إشراك المريض في إدارة حالته الصحية", "تكثيف الفحوصات الدورية"],
+      correct: 1,
+      explanation: "إدارة المريض لحالته الصحية عنصر محوري في الأمراض المزمنة.",
+      voice: "أريد أن أتمكن من إدارة مرضي بثقة."
+    },
+    {
+      station: "WHO Gold Challenge",
+      question: "ما الرسالة الرئيسية لليوم العالمي لسلامة المرضى؟",
+      options: ["التكنولوجيا تحسن جودة الرعاية", "الرعاية الأكثر أماناً تتحقق عندما يكون المريض شريكاً في الرعاية", "زيادة الموارد تقلل الأخطاء"],
+      correct: 1,
+      explanation: "الشراكة مع المرضى والأسر هي جوهر سلامة المرضى الحديثة.",
+      voice: "أنا لست متلقياً للرعاية فقط... أنا شريك في سلامتي."
+    }
+  ]
+};
 
-// Language translation
+// Language translations
 const translations = {
   ar: {
     mainTitle: "🏥 رحلة المريض الآمنة",
@@ -199,7 +478,6 @@ function setLanguage(lang) {
     document.documentElement.dir = "rtl";
   }
 
-  // Update all text elements
   const trans = translations[lang];
   document.getElementById("mainTitle").innerHTML = trans.mainTitle;
   document.getElementById("subTitle").innerHTML = trans.subTitle;
@@ -253,66 +531,45 @@ function startGame() {
   document.getElementById("registrationScreen").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
 
-  initializeStations();
-  loadStation(0);
+  selectedRole = player.role;
+  currentQuestionIndex = 0;
+  loadQuestion();
 }
 
 /**
- * Initialize all stations on the map
+ * Load a specific question based on player role
  */
-function initializeStations() {
-  const stationMap = document.getElementById("stationMap");
-  stationMap.innerHTML = "";
+function loadQuestion() {
+  const roleQuestions = questions[selectedRole] || questions["WHOChallenges"];
   
-  stations.forEach((station, index) => {
-    const stationDiv = document.createElement("div");
-    stationDiv.className = "station";
-    stationDiv.id = `station-${index}`;
-    stationDiv.innerHTML = `${station.emoji} ${station.name}`;
-    stationMap.appendChild(stationDiv);
-  });
-}
+  if (currentQuestionIndex >= roleQuestions.length) {
+    endGame();
+    return;
+  }
 
-/**
- * Load a specific station
- */
-function loadStation(index) {
-  currentStationIndex = index;
-  const station = stations[index];
+  const question = roleQuestions[currentQuestionIndex];
 
-  // Update station highlighting
-  document.querySelectorAll(".station").forEach((s, i) => {
-    s.classList.remove("active", "completed");
-    if (i < index) s.classList.add("completed");
-    if (i === index) s.classList.add("active");
-  });
+  document.getElementById("currentStation").innerHTML = language === "ar" ? `المحطة: ${question.station}` : `Station: ${question.station}`;
+  document.getElementById("questionText").innerHTML = question.question;
 
-  // Update title
-  const stationTitle = language === "ar" ? `المحطة: ${station.name}` : `Station: ${station.name}`;
-  document.getElementById("currentStation").innerHTML = stationTitle;
-  document.getElementById("questionText").innerHTML = language === "ar" ? station.questionAr : station.question;
-
-  // Clear previous answers and feedback
   document.getElementById("answers").innerHTML = "";
   document.getElementById("feedback").innerHTML = "";
 
-  // Load answers
   const answersDiv = document.getElementById("answers");
-  station.answers.forEach((answer) => {
+  question.options.forEach((option, index) => {
     const button = document.createElement("button");
-    button.innerHTML = language === "ar" ? answer.textAr : answer.text;
-    button.onclick = () => checkAnswer(answer.correct, button);
+    button.innerHTML = option;
+    button.onclick = () => checkAnswer(index === question.correct, button, question.explanation);
     answersDiv.appendChild(button);
   });
 
-  // Update progress bars
   updateBars();
 }
 
 /**
  * Check the player's answer
  */
-function checkAnswer(correct, buttonElement) {
+function checkAnswer(correct, buttonElement, explanation) {
   const allButtons = document.querySelectorAll("#answers button");
   allButtons.forEach(btn => btn.disabled = true);
 
@@ -324,26 +581,22 @@ function checkAnswer(correct, buttonElement) {
   if (correct) {
     buttonElement.classList.add("correct");
     feedbackDiv.classList.add("correct");
-    feedbackDiv.innerHTML = trans.correctAnswer;
+    feedbackDiv.innerHTML = trans.correctAnswer + "<br><em>" + explanation + "</em>";
     answeredCorrectly++;
   } else {
     buttonElement.classList.add("incorrect");
     feedbackDiv.classList.add("incorrect");
-    feedbackDiv.innerHTML = trans.incorrectAnswer;
+    feedbackDiv.innerHTML = trans.incorrectAnswer + "<br><em>" + explanation + "</em>";
     safetyScore -= 10;
     trustScore -= 10;
   }
 
   updateBars();
 
-  // Move to next station or end game
   setTimeout(() => {
-    if (currentStationIndex < stations.length - 1) {
-      loadStation(currentStationIndex + 1);
-    } else {
-      endGame();
-    }
-  }, 2000);
+    currentQuestionIndex++;
+    loadQuestion();
+  }, 3000);
 }
 
 /**
@@ -367,7 +620,8 @@ function endGame() {
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("gameOverScreen").classList.remove("hidden");
 
-  const finalScore = Math.round((answeredCorrectly / stations.length) * 100);
+  const roleQuestions = questions[selectedRole] || questions["WHOChallenges"];
+  const finalScore = Math.round((answeredCorrectly / roleQuestions.length) * 100);
   document.getElementById("finalScore").innerHTML = finalScore + "%";
   document.getElementById("playerInfo").innerHTML = `<strong>${player.name}</strong> - ${player.role} at ${player.department}`;
 }
