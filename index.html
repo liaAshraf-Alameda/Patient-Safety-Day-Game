@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safe Patient Journey</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- شاشة الترحيب -->
+  <div class="screen" id="welcomeScreen">
+    <div class="card hero-card">
+      <div class="hero-left">
+        <div class="patient-big">👴</div>
+        <h2>Mr. Samir</h2>
+        <p>Diabetes • Hypertension • Heart Disease</p>
+      </div>
+      <div class="hero-right">
+        <h1 id="mainTitle">🏥 Safe Patient Journey</h1>
+        <h3 id="subTitle">World Patient Safety Day 2026</h3>
+        <p id="missionText">ساعد عم سمير على إكمال رحلة آمنة داخل المستشفى</p>
+        <div>
+          <button onclick="setLanguage('ar')">العربية</button>
+          <button onclick="setLanguage('en')">English</button>
+        </div>
+        <br>
+        <button onclick="showRegistration()">ابدأ اللعبة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- شاشة التسجيل -->
+  <div class="screen hidden" id="registrationScreen">
+    <div class="card">
+      <h2 id="regTitle">بيانات اللاعب</h2>
+      <label id="nameLabel">الاسم</label>
+      <input id="playerName" placeholder="">
+      <label id="deptLabel">القسم</label>
+      <input id="department" placeholder="">
+      <label id="roleLabel">الدور الوظيفي</label>
+      <select id="role">
+        <option value="Doctor">👨‍⚕️ Doctor</option>
+        <option value="Nurse">👩‍⚕️ Nurse</option>
+        <option value="Pharmacist">💊 Pharmacist</option>
+        <option value="Kitchen">🍲 Kitchen</option>
+        <option value="Housekeeping">🧹 Housekeeping</option>
+        <option value="Maintenance">🔧 Maintenance</option>
+        <option value="Administration">📋 Administration</option>
+      </select>
+      <button onclick="startGame()" id="startBtn">دخول اللعبة</button>
+    </div>
+  </div>
+
+  <!-- شاشة اللعبة -->
+  <div class="screen hidden" id="gameScreen">
+    <div class="card">
+      <div id="avatar">👴</div>
+      <h2 id="patientName">عم سمير</h2>
+      <p id="patientCondition">Diabetes • Hypertension • Heart Disease</p>
+    </div>
+
+    <div class="card">
+      <div class="dashboard">
+        <div>
+          <h3 id="safetyLabel">Patient Safety Score</h3>
+          <div class="bar">
+            <div class="fill" id="safetyBar"></div>
+          </div>
+          <h2 id="safetyValue">100</h2>
+        </div>
+        <div>
+          <h3 id="trustLabel">Patient Trust</h3>
+          <div class="bar">
+            <div class="fill" id="trustBar"></div>
+          </div>
+          <h2 id="trustValue">100%</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 id="journeyTitle">🏥 رحلة عم سمير</h2>
+      <div class="station-map" id="stationMap">
+        <!-- Stations will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 id="currentStation">المحطة الحالية</h2>
+      <h3 id="questionText">سيتم تحميل السؤال هنا</h3>
+      <div id="answers"></div>
+      <div id="feedback"></div>
+    </div>
+  </div>
+
+  <!-- شاشة النهاية -->
+  <div class="screen hidden" id="gameOverScreen">
+    <div class="card game-over">
+      <h1 id="gameOverTitle">تم إكمال اللعبة!</h1>
+      <p id="finalMessage">شكراً لك على مساعدتك لعم سمير على إكمال رحلة آمنة!</p>
+      <div class="score">
+        <span id="finalScore">100</span>
+      </div>
+      <p id="playerInfo"></p>
+      <button onclick="location.reload()">لعبة جديدة</button>
+    </div>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+
+</html>
