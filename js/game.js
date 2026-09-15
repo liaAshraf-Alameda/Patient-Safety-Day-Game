@@ -5,6 +5,7 @@ let safetyScore = 100;
 let trustScore = 100;
 let answeredCorrectly = 0;
 let selectedRole = null;
+let isWHOChallenge = false;
 
 let player = {
   name: "",
@@ -74,7 +75,7 @@ const questions = {
     {
       station: "Nutrition",
       question: "وصلت وجبة إلى مريض مختلف.",
-      options: ["مراجعة رقم ��لغرفة", "مطابقة هوية المريض قبل تسليم الوجبة", "الرجوع إلى قائمة الوجبات"],
+      options: ["مراجعة رقم الغرفة", "مطابقة هوية المريض قبل تسليم الوجبة", "الرجوع إلى قائمة الوجبات"],
       correct: 1,
       explanation: "مطابقة هوية المريض تمنع الأخطاء الغذائية.",
       voice: "أريد الوجبة المخصصة لي."
@@ -444,7 +445,9 @@ const translations = {
     gameOverTitle: "تم إكمال اللعبة!",
     finalMessage: "شكراً لك على مساعدتك لعم سمير على إكمال رحلة آمنة!",
     correctAnswer: "✓ إجابة صحيحة! ممتاز!",
-    incorrectAnswer: "✗ إجابة خاطئة. تقليل الثقة والسلامة"
+    incorrectAnswer: "✗ إجابة خاطئة. تقليل الثقة والسلامة",
+    whoChallengeTitle: "🏆 تحديات اليوم العالمي لسلامة المرضى",
+    whoChallengeMessage: "أكملت أسئلتك بنجاح! الآن حان وقت التحدي النهائي!"
   },
   en: {
     mainTitle: "🏥 Safe Patient Journey",
@@ -462,7 +465,9 @@ const translations = {
     gameOverTitle: "Game Complete!",
     finalMessage: "Thank you for helping Mr. Samir complete a safe hospital journey!",
     correctAnswer: "✓ Correct! Excellent!",
-    incorrectAnswer: "✗ Incorrect. Safety and trust decreased"
+    incorrectAnswer: "✗ Incorrect. Safety and trust decreased",
+    whoChallengeTitle: "🏆 World Patient Safety Day Challenges",
+    whoChallengeMessage: "You completed your questions successfully! Now it's time for the final challenge!"
   }
 };
 
@@ -533,6 +538,7 @@ function startGame() {
 
   selectedRole = player.role;
   currentQuestionIndex = 0;
+  isWHOChallenge = false;
   loadQuestion();
 }
 
@@ -540,10 +546,16 @@ function startGame() {
  * Load a specific question based on player role
  */
 function loadQuestion() {
-  const roleQuestions = questions[selectedRole] || questions["WHOChallenges"];
+  const roleQuestions = isWHOChallenge ? questions["WHOChallenges"] : (questions[selectedRole] || questions["WHOChallenges"]);
   
   if (currentQuestionIndex >= roleQuestions.length) {
-    endGame();
+    // If we just finished role questions, move to WHO Challenge
+    if (!isWHOChallenge) {
+      showWHOChallengeIntro();
+    } else {
+      // If we finished WHO Challenge, end the game
+      endGame();
+    }
     return;
   }
 
@@ -564,6 +576,25 @@ function loadQuestion() {
   });
 
   updateBars();
+}
+
+/**
+ * Show WHO Challenge introduction
+ */
+function showWHOChallengeIntro() {
+  const trans = translations[language];
+  const feedbackDiv = document.getElementById("feedback");
+  feedbackDiv.classList.add("correct");
+  feedbackDiv.innerHTML = `<h2>${trans.whoChallengeTitle}</h2><p>${trans.whoChallengeMessage}</p>`;
+  
+  const answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+  
+  setTimeout(() => {
+    isWHOChallenge = true;
+    currentQuestionIndex = 0;
+    loadQuestion();
+  }, 3000);
 }
 
 /**
@@ -620,8 +651,10 @@ function endGame() {
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("gameOverScreen").classList.remove("hidden");
 
-  const roleQuestions = questions[selectedRole] || questions["WHOChallenges"];
-  const finalScore = Math.round((answeredCorrectly / roleQuestions.length) * 100);
+  const roleQuestions = questions[selectedRole] || [];
+  const whoQuestions = questions["WHOChallenges"];
+  const totalQuestions = roleQuestions.length + whoQuestions.length;
+  const finalScore = Math.round((answeredCorrectly / totalQuestions) * 100);
   document.getElementById("finalScore").innerHTML = finalScore + "%";
   document.getElementById("playerInfo").innerHTML = `<strong>${player.name}</strong> - ${player.role} at ${player.department}`;
 }
