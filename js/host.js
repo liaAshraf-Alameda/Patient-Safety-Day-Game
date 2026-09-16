@@ -8,6 +8,7 @@
 let currentSessionId = null;
 let playersRef = null;
 let hostMusicEnabled = false;
+let roleBaselines = {};
 
 function getHostMusic() {
   return document.getElementById("hostBackgroundMusic");
@@ -135,8 +136,6 @@ function renderLeaderboard(players) {
     return;
   }
 
-  updateRoleAwards(groups);
-
   container.innerHTML = groups.map((group, index) => {
     const rank = index + 1;
     const average = Math.round(group.averageScore * 10) / 10;
@@ -155,6 +154,11 @@ function renderLeaderboard(players) {
         <div class="role-average">${average}%</div>
       </div>`;
   }).join("");
+  try {
+    updateRoleAwards(groups);
+  } catch (error) {
+    console.warn("Role awards could not update", error);
+  }
 }
 
 function escapeHtml(value) {
