@@ -7,6 +7,69 @@
 
 let currentSessionId = null;
 let playersRef = null;
+let hostAudioContext = null;
+let hostMusicGain = null;
+let hostMusicTimer = null;
+let hostMusicEnabled = false;
+
+function playAmbientPhrase() {
+  if (!hostAudioContext || !hostMusicEnabled) return;
+  const notes = [261.63, 329.63, 392.00, 493.88, 392.00, 329.63];
+  const start = hostAudioContext.currentTime + 0.05;
+  notes.forEach((frequency, index) => {
+    const oscillator = hostAudioContext.createOscillator();
+    const gain = hostAudioContext.createGain();
+    oscillator.type = index % 2 ? "sine" : "triangle";
+    oscillator.frequency.value = frequency / (index === 3 ? 2 : 1);
+    gain.gain.setValueAtTime(0.0001, start + index * 0.48);
+    gain.gain.exponentialRampToValueAtTime(0.055, start + index * 0.48 + 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + index * 0.48 + 1.35);
+    oscillator.connect(gain);
+    gain.connect(hostMusicGain);
+    oscillator.start(start + index * 0.48);
+    oscillator.stop(start + index * 0.48 + 1.5);
+  });
+}
+
+function updateMusicButton() {
+  const button = document.getElementById("musicToggle");
+  if (!button) return;
+  button.classList.toggle("active", hostMusicEnabled);
+  button.setAttribute("aria-pressed", hostMusicEnabled ? "true" : "false");
+  button.querySelector("b").textContent = hostMusicEnabled ? "Music On" : "Music";
+}
+
+function startHostMusic() {
+  if (hostMusicEnabled) return;
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+  hostAudioContext = hostAudioContext || new AudioContextClass();
+  if (hostAudioContext.state === "suspended") hostAudioContext.resume();
+  hostMusicGain = hostMusicGain || hostAudioContext.createGain();
+  hostMusicGain.gain.value = 0.55;
+  hostMusicGain.connect(hostAudioContext.destination);
+  hostMusicEnabled = true;
+  playAmbientPhrase();
+  hostMusicTimer = setInterval(playAmbientPhrase, 4300);
+  updateMusicButton();
+}
+
+function stopHostMusic() {
+  hostMusicEnabled = false;
+  if (hostMusicTimer) clearInterval(hostMusicTimer);
+  hostMusicTimer = null;
+  if (hostMusicGain && hostAudioContext) {
+    hostMusicGain.gain.cancelScheduledValues(hostAudioContext.currentTime);
+    hostMusicGain.gain.setTargetAtTime(0.0001, hostAudioContext.currentTime, 0.08);
+  }
+  updateMusicButton();
+}
+
+function toggleHostMusic() {
+  if (hostMusicEnabled) stopHostMusic();
+  else startHostMusic();
+}
+window.toggleHostMusic = toggleHostMusic;
 
 function makeSessionId() {
   return "s_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
@@ -112,6 +175,10 @@ function startNewSession() {
 }
 
 window.startNewSession = startNewSession;
+
+document.addEventListener("pointerdown", event => {
+  if (!event.target.closest("#musicToggle")) startHostMusic();
+}, { once: true });
 
 window.addEventListener("DOMContentLoaded", () => {
   currentSessionId = sessionStorage.getItem("psd_host_session_id") || makeSessionId();
