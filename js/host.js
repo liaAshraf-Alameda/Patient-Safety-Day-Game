@@ -45,9 +45,12 @@ function startHostMusic() {
   if (!AudioContextClass) return;
   hostAudioContext = hostAudioContext || new AudioContextClass();
   if (hostAudioContext.state === "suspended") hostAudioContext.resume();
-  hostMusicGain = hostMusicGain || hostAudioContext.createGain();
-  hostMusicGain.gain.value = 0.55;
-  hostMusicGain.connect(hostAudioContext.destination);
+  if (!hostMusicGain) {
+    hostMusicGain = hostAudioContext.createGain();
+    hostMusicGain.connect(hostAudioContext.destination);
+  }
+  hostMusicGain.gain.cancelScheduledValues(hostAudioContext.currentTime);
+  hostMusicGain.gain.setValueAtTime(0.55, hostAudioContext.currentTime);
   hostMusicEnabled = true;
   playAmbientPhrase();
   hostMusicTimer = setInterval(playAmbientPhrase, 4300);
