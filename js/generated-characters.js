@@ -66,6 +66,7 @@
     const staff = document.getElementById('generatedStaffArt');
     const patient = document.getElementById('generatedPatientArt');
     const stage = document.querySelector('.game-stage');
+    const gameScreen = document.getElementById('gameScreen');
     const heading = document.querySelector('.station-heading');
 
     if (staff) {
@@ -78,6 +79,7 @@
       if (key !== 'WHOChallenges') setPatientState(patientState || 'thinking');
     }
 
+    if (gameScreen) gameScreen.setAttribute('data-role-art', key.toLowerCase());
     if (stage) stage.style.setProperty('--scene-image', 'url("' + station.scene + '")');
     if (heading) heading.style.setProperty('--header-image', 'url("' + station.header + '")');
   }
