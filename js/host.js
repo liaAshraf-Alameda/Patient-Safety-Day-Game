@@ -7,29 +7,10 @@
 
 let currentSessionId = null;
 let playersRef = null;
-let hostAudioContext = null;
-let hostMusicGain = null;
-let hostMusicTimer = null;
 let hostMusicEnabled = false;
-let roleBaselines = {};
 
-function playAmbientPhrase() {
-  if (!hostAudioContext || !hostMusicEnabled) return;
-  const notes = [261.63, 329.63, 392.00, 493.88, 392.00, 329.63];
-  const start = hostAudioContext.currentTime + 0.05;
-  notes.forEach((frequency, index) => {
-    const oscillator = hostAudioContext.createOscillator();
-    const gain = hostAudioContext.createGain();
-    oscillator.type = index % 2 ? "sine" : "triangle";
-    oscillator.frequency.value = frequency / (index === 3 ? 2 : 1);
-    gain.gain.setValueAtTime(0.0001, start + index * 0.48);
-    gain.gain.exponentialRampToValueAtTime(0.055, start + index * 0.48 + 0.12);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + index * 0.48 + 1.35);
-    oscillator.connect(gain);
-    gain.connect(hostMusicGain);
-    oscillator.start(start + index * 0.48);
-    oscillator.stop(start + index * 0.48 + 1.5);
-  });
+function getHostMusic() {
+  return document.getElementById("hostBackgroundMusic");
 }
 
 function updateMusicButton() {
@@ -41,31 +22,25 @@ function updateMusicButton() {
 }
 
 function startHostMusic() {
-  if (hostMusicEnabled) return;
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContextClass) return;
-  hostAudioContext = hostAudioContext || new AudioContextClass();
-  if (hostAudioContext.state === "suspended") hostAudioContext.resume();
-  if (!hostMusicGain) {
-    hostMusicGain = hostAudioContext.createGain();
-    hostMusicGain.connect(hostAudioContext.destination);
+  const music = getHostMusic();
+  if (!music || hostMusicEnabled) return;
+  music.volume = 0.28;
+  const playRequest = music.play();
+  if (playRequest) {
+    playRequest.then(() => {
+      hostMusicEnabled = true;
+      updateMusicButton();
+    }).catch(() => {
+      hostMusicEnabled = false;
+      updateMusicButton();
+    });
   }
-  hostMusicGain.gain.cancelScheduledValues(hostAudioContext.currentTime);
-  hostMusicGain.gain.setValueAtTime(0.55, hostAudioContext.currentTime);
-  hostMusicEnabled = true;
-  playAmbientPhrase();
-  hostMusicTimer = setInterval(playAmbientPhrase, 4300);
-  updateMusicButton();
 }
 
 function stopHostMusic() {
+  const music = getHostMusic();
+  if (music) music.pause();
   hostMusicEnabled = false;
-  if (hostMusicTimer) clearInterval(hostMusicTimer);
-  hostMusicTimer = null;
-  if (hostMusicGain && hostAudioContext) {
-    hostMusicGain.gain.cancelScheduledValues(hostAudioContext.currentTime);
-    hostMusicGain.gain.setTargetAtTime(0.0001, hostAudioContext.currentTime, 0.08);
-  }
   updateMusicButton();
 }
 
