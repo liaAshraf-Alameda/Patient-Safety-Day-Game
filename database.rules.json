@@ -6,7 +6,7 @@
       ".read": true,
       "$playerId": {
         ".write": true,
-        ".validate": "newData.hasChildren(['name', 'role', 'department']) && newData.child('name').isString() && newData.child('name').val().length <= 60 && newData.child('role').isString() && newData.child('department').isString() && newData.child('safetyScore').isNumber() && newData.child('trustScore').isNumber() && newData.child('answeredCorrectly').isNumber()"
+        ".validate": "newData.hasChildren(['role']) && newData.child('role').isString() && newData.child('safetyScore').isNumber() && newData.child('trustScore').isNumber() && newData.child('answeredCorrectly').isNumber()"
       }
     }
   }
