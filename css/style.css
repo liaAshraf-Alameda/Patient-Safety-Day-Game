@@ -205,6 +205,7 @@ option {
 
 #avatar {
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .avatar-svg {
@@ -215,40 +216,62 @@ option {
 
 .avatar-shadow {
   fill: rgba(3, 7, 20, 0.55);
-  filter: blur(2px);
+  filter: blur(3px);
 }
 
 .avatar-figure {
   transform-box: view-box;
   transform-origin: 100px 300px;
-  animation: float 2.4s ease-in-out infinite;
-  filter: drop-shadow(0 0 18px rgba(0, 217, 255, 0.45));
+  animation: float 2.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 14px rgba(0, 217, 255, 0.35));
   transition: filter 0.3s ease;
 }
 
 .avatar-head,
-.avatar-ear {
-  fill: #ffe0c2;
-  stroke: rgba(255, 255, 255, 0.5);
-  stroke-width: 1.5;
+.avatar-ear,
+.avatar-neck,
+.avatar-hand {
+  stroke: rgba(120, 70, 40, 0.35);
+  stroke-width: 1;
+}
+
+.avatar-cheek-shade {
+  pointer-events: none;
 }
 
 .avatar-hair {
-  fill: none;
-  stroke: #c7d3ef;
-  stroke-width: 12;
+  stroke: rgba(150, 160, 200, 0.5);
+  stroke-width: 0.5;
+}
+
+.avatar-eyebrow {
+  stroke: #7a5a3a;
+  stroke-width: 3;
   stroke-linecap: round;
 }
 
+.avatar-nose {
+  stroke: rgba(150, 90, 50, 0.55);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .avatar-eye {
-  fill: #0c1230;
+  fill: #14213f;
 }
 
 .avatar-eye-line,
 .avatar-mouth {
   fill: none;
-  stroke: #0c1230;
-  stroke-width: 3.5;
+  stroke: #14213f;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+}
+
+.avatar-collar {
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 2.5;
   stroke-linecap: round;
 }
 
@@ -269,43 +292,46 @@ option {
 }
 
 .avatar-gown {
-  stroke: var(--accent-highlight);
-  stroke-width: 2;
-}
-
-.avatar-leg,
-.avatar-foot {
-  fill: #232c58;
-  stroke: rgba(143, 232, 255, 0.35);
+  stroke: rgba(0, 217, 255, 0.35);
   stroke-width: 1.5;
 }
 
+.avatar-leg {
+  stroke: rgba(143, 232, 255, 0.2);
+  stroke-width: 1;
+}
+
+.avatar-foot {
+  stroke: rgba(143, 232, 255, 0.2);
+  stroke-width: 1;
+}
+
 .avatar-arm {
-  stroke: #232c58;
-  stroke-width: 16;
+  stroke-width: 15;
   stroke-linecap: round;
   transform-box: view-box;
   transition: transform 0.35s ease;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
 }
 
 .arm-left {
-  transform-origin: 68px 120px;
+  transform-origin: 70px 126px;
 }
 
 .arm-right {
-  transform-origin: 132px 120px;
+  transform-origin: 130px 126px;
 }
 
 .head-group {
   transform-box: view-box;
-  transform-origin: 100px 60px;
+  transform-origin: 100px 64px;
   transition: transform 0.3s ease;
 }
 
 /* Correct answer reaction: cheerful jump with raised arms */
 .avatar-wrap.state-correct .avatar-figure {
   animation: avatarBounce 0.7s ease;
-  filter: drop-shadow(0 0 26px rgba(93, 255, 133, 0.65));
+  filter: drop-shadow(0 0 22px rgba(93, 255, 133, 0.6));
 }
 
 .avatar-wrap.state-correct .face-normal {
@@ -317,17 +343,17 @@ option {
 }
 
 .avatar-wrap.state-correct .arm-left {
-  transform: rotate(-165deg);
+  transform: rotate(-170deg);
 }
 
 .avatar-wrap.state-correct .arm-right {
-  transform: rotate(165deg);
+  transform: rotate(170deg);
 }
 
 /* Incorrect answer reaction: slumped shoulders and a sad shake */
 .avatar-wrap.state-incorrect .avatar-figure {
   animation: avatarShake 0.6s ease;
-  filter: drop-shadow(0 0 26px rgba(255, 107, 122, 0.65));
+  filter: drop-shadow(0 0 22px rgba(255, 107, 122, 0.6));
 }
 
 .avatar-wrap.state-incorrect .face-normal {
@@ -339,11 +365,11 @@ option {
 }
 
 .avatar-wrap.state-incorrect .arm-left {
-  transform: rotate(18deg);
+  transform: rotate(24deg);
 }
 
 .avatar-wrap.state-incorrect .arm-right {
-  transform: rotate(-18deg);
+  transform: rotate(-24deg);
 }
 
 .avatar-wrap.state-incorrect .head-group {
@@ -355,13 +381,13 @@ option {
     transform: translateY(0) scale(1);
   }
   30% {
-    transform: translateY(-30px) scale(1.05);
+    transform: translateY(-28px) scale(1.05);
   }
   55% {
     transform: translateY(4px) scale(0.98);
   }
   75% {
-    transform: translateY(-10px) scale(1.02);
+    transform: translateY(-9px) scale(1.02);
   }
   100% {
     transform: translateY(0) scale(1);
@@ -374,16 +400,16 @@ option {
     transform: translateX(0) rotate(0deg);
   }
   20% {
-    transform: translateX(-10px) rotate(-4deg);
+    transform: translateX(-9px) rotate(-4deg);
   }
   40% {
-    transform: translateX(9px) rotate(4deg);
+    transform: translateX(8px) rotate(4deg);
   }
   60% {
-    transform: translateX(-7px) rotate(-3deg);
+    transform: translateX(-6px) rotate(-3deg);
   }
   80% {
-    transform: translateX(6px) rotate(2deg);
+    transform: translateX(5px) rotate(2deg);
   }
 }
 
@@ -392,7 +418,7 @@ option {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
   100% {
     transform: translateY(0px);
@@ -420,6 +446,33 @@ option {
 
 .hero-right {
   text-align: center;
+}
+
+.patient-info-card {
+  text-align: center;
+}
+
+.question-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+}
+
+.question-card .avatar-svg {
+  width: 140px;
+}
+
+.question-content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .question-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }
 
 #answers {

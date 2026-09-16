@@ -17,42 +17,64 @@
         <div class="patient-big">
           <svg class="avatar-svg" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mr. Samir avatar">
             <defs>
+              <radialGradient id="skinGradientHero" cx="38%" cy="30%" r="75%">
+                <stop offset="0%" stop-color="#ffe3c4" />
+                <stop offset="65%" stop-color="#f0bd8f" />
+                <stop offset="100%" stop-color="#cf9868" />
+              </radialGradient>
+              <linearGradient id="hairGradientHero" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#eef2fb" />
+                <stop offset="100%" stop-color="#a9b4d6" />
+              </linearGradient>
               <linearGradient id="gownGradientHero" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#b026ff" stop-opacity="0.55" />
-                <stop offset="100%" stop-color="#00d9ff" stop-opacity="0.55" />
+                <stop offset="0%" stop-color="#3a4b8f" />
+                <stop offset="100%" stop-color="#1c2650" />
+              </linearGradient>
+              <linearGradient id="pantsGradientHero" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#2b3565" />
+                <stop offset="100%" stop-color="#161c3a" />
               </linearGradient>
             </defs>
-            <ellipse class="avatar-shadow" cx="100" cy="300" rx="52" ry="10" />
+            <ellipse class="avatar-shadow" cx="100" cy="300" rx="50" ry="9" />
             <g class="avatar-figure">
+              <rect class="avatar-leg" x="79" y="200" width="17" height="68" rx="8" fill="url(#pantsGradientHero)" />
+              <rect class="avatar-leg" x="104" y="200" width="17" height="68" rx="8" fill="url(#pantsGradientHero)" />
+              <path class="avatar-foot" d="M72 266 h26 a8 8 0 0 1 8 8 v2 h-40 a6 6 0 0 1 6 -10 Z" fill="#12172e" />
+              <path class="avatar-foot" d="M102 266 h26 a8 8 0 0 1 8 8 v2 h-40 a6 6 0 0 1 6 -10 Z" fill="#12172e" />
+              <path class="avatar-gown" d="M64 128 C64 112 79 102 100 102 C121 102 136 112 136 128 L133 206 C133 214 119 219 100 219 C81 219 67 214 67 206 Z" fill="url(#gownGradientHero)" />
+              <path class="avatar-gown-shade" d="M100 102 C121 102 136 112 136 128 L133 206 C133 214 119 219 100 219 Z" fill="rgba(0,0,0,0.18)" />
+              <path class="avatar-collar" d="M86 104 L100 122 L114 104" fill="none" />
+              <line class="avatar-arm arm-left" x1="70" y1="126" x2="54" y2="188" stroke="url(#skinGradientHero)" />
+              <line class="avatar-arm arm-right" x1="130" y1="126" x2="146" y2="188" stroke="url(#skinGradientHero)" />
+              <circle class="avatar-hand" cx="54" cy="192" r="8" fill="url(#skinGradientHero)" />
+              <circle class="avatar-hand" cx="146" cy="192" r="8" fill="url(#skinGradientHero)" />
+              <path class="avatar-neck" d="M90 82 L90 102 Q100 108 110 102 L110 82 Z" fill="url(#skinGradientHero)" />
               <g class="head-group">
-                <path class="avatar-hair" d="M66 42 Q100 8 134 42" />
-                <circle class="avatar-ear" cx="66" cy="60" r="6" />
-                <circle class="avatar-ear" cx="134" cy="60" r="6" />
-                <circle class="avatar-head" cx="100" cy="58" r="34" />
+                <path class="avatar-hair" d="M64 52 C62 26 78 6 100 6 C122 6 138 26 136 52 C136 40 128 30 118 28 C120 34 118 40 114 42 C110 32 100 28 92 30 C86 32 82 38 82 44 C76 42 70 46 68 54 Z" fill="url(#hairGradientHero)" />
+                <ellipse class="avatar-ear" cx="65" cy="64" rx="6" ry="8" fill="url(#skinGradientHero)" />
+                <ellipse class="avatar-ear" cx="135" cy="64" rx="6" ry="8" fill="url(#skinGradientHero)" />
+                <path class="avatar-head" d="M100 24 C120 24 132 42 132 62 C132 82 122 98 108 104 C105 105.5 102.5 106 100 106 C97.5 106 95 105.5 92 104 C78 98 68 82 68 62 C68 42 80 24 100 24 Z" fill="url(#skinGradientHero)" />
+                <path class="avatar-cheek-shade" d="M100 106 C114 104 124 92 128 76 C130 92 122 104 108 104 C105 105.5 102.5 106 100 106 Z" fill="rgba(150,90,50,0.18)" />
+                <path class="avatar-eyebrow" d="M78 50 Q86 45 94 49" fill="none" />
+                <path class="avatar-eyebrow" d="M106 49 Q114 45 122 50" fill="none" />
+                <path class="avatar-nose" d="M100 54 L96 68 Q100 72 104 68" fill="none" />
                 <g class="face face-normal">
-                  <circle class="avatar-eye" cx="86" cy="56" r="4" />
-                  <circle class="avatar-eye" cx="114" cy="56" r="4" />
-                  <path class="avatar-mouth" d="M90 78 L110 78" />
+                  <circle class="avatar-eye" cx="86" cy="58" r="3.6" />
+                  <circle class="avatar-eye" cx="114" cy="58" r="3.6" />
+                  <path class="avatar-mouth" d="M88 80 Q100 83 112 80" />
                 </g>
                 <g class="face face-happy">
-                  <path class="avatar-eye-line" d="M80 58 Q86 48 92 58" />
-                  <path class="avatar-eye-line" d="M108 58 Q114 48 120 58" />
-                  <path class="avatar-mouth" d="M84 74 Q100 92 116 74" />
+                  <path class="avatar-eye-line" d="M80 60 Q86 51 92 60" />
+                  <path class="avatar-eye-line" d="M108 60 Q114 51 120 60" />
+                  <path class="avatar-mouth" d="M84 78 Q100 96 116 78" />
                 </g>
                 <g class="face face-sad">
-                  <path class="avatar-eye-line" d="M80 54 Q86 60 92 54" />
-                  <path class="avatar-eye-line" d="M108 54 Q114 60 120 54" />
-                  <path class="avatar-mouth" d="M84 84 Q100 70 116 84" />
-                  <path class="avatar-tear" d="M114 62 Q118 70 114 76 Q110 70 114 62 Z" />
+                  <path class="avatar-eye-line" d="M80 56 Q86 61 92 56" />
+                  <path class="avatar-eye-line" d="M108 56 Q114 61 120 56" />
+                  <path class="avatar-mouth" d="M84 88 Q100 74 116 88" />
+                  <path class="avatar-tear" d="M114 66 Q118 74 114 80 Q110 74 114 66 Z" />
                 </g>
               </g>
-              <rect class="avatar-gown" x="65" y="108" width="70" height="100" rx="18" fill="url(#gownGradientHero)" />
-              <line class="avatar-arm arm-left" x1="68" y1="120" x2="55" y2="195" />
-              <line class="avatar-arm arm-right" x1="132" y1="120" x2="145" y2="195" />
-              <rect class="avatar-leg" x="78" y="202" width="16" height="66" rx="7" />
-              <rect class="avatar-leg" x="106" y="202" width="16" height="66" rx="7" />
-              <ellipse class="avatar-foot" cx="86" cy="272" rx="12" ry="6" />
-              <ellipse class="avatar-foot" cx="114" cy="272" rx="12" ry="6" />
             </g>
           </svg>
         </div>
@@ -97,49 +119,7 @@
 
   <!-- شاشة اللعبة -->
   <div class="screen hidden" id="gameScreen">
-    <div class="card">
-      <div id="avatar" class="avatar-wrap">
-        <svg class="avatar-svg" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mr. Samir avatar">
-          <defs>
-            <linearGradient id="gownGradientGame" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#b026ff" stop-opacity="0.55" />
-              <stop offset="100%" stop-color="#00d9ff" stop-opacity="0.55" />
-            </linearGradient>
-          </defs>
-          <ellipse class="avatar-shadow" cx="100" cy="300" rx="52" ry="10" />
-          <g class="avatar-figure">
-            <g class="head-group">
-              <path class="avatar-hair" d="M66 42 Q100 8 134 42" />
-              <circle class="avatar-ear" cx="66" cy="60" r="6" />
-              <circle class="avatar-ear" cx="134" cy="60" r="6" />
-              <circle class="avatar-head" cx="100" cy="58" r="34" />
-              <g class="face face-normal">
-                <circle class="avatar-eye" cx="86" cy="56" r="4" />
-                <circle class="avatar-eye" cx="114" cy="56" r="4" />
-                <path class="avatar-mouth" d="M90 78 L110 78" />
-              </g>
-              <g class="face face-happy">
-                <path class="avatar-eye-line" d="M80 58 Q86 48 92 58" />
-                <path class="avatar-eye-line" d="M108 58 Q114 48 120 58" />
-                <path class="avatar-mouth" d="M84 74 Q100 92 116 74" />
-              </g>
-              <g class="face face-sad">
-                <path class="avatar-eye-line" d="M80 54 Q86 60 92 54" />
-                <path class="avatar-eye-line" d="M108 54 Q114 60 120 54" />
-                <path class="avatar-mouth" d="M84 84 Q100 70 116 84" />
-                <path class="avatar-tear" d="M114 62 Q118 70 114 76 Q110 70 114 62 Z" />
-              </g>
-            </g>
-            <rect class="avatar-gown" x="65" y="108" width="70" height="100" rx="18" fill="url(#gownGradientGame)" />
-            <line class="avatar-arm arm-left" x1="68" y1="120" x2="55" y2="195" />
-            <line class="avatar-arm arm-right" x1="132" y1="120" x2="145" y2="195" />
-            <rect class="avatar-leg" x="78" y="202" width="16" height="66" rx="7" />
-            <rect class="avatar-leg" x="106" y="202" width="16" height="66" rx="7" />
-            <ellipse class="avatar-foot" cx="86" cy="272" rx="12" ry="6" />
-            <ellipse class="avatar-foot" cx="114" cy="272" rx="12" ry="6" />
-          </g>
-        </svg>
-      </div>
+    <div class="card patient-info-card">
       <h2 id="patientName">عم سمير</h2>
       <p id="patientCondition">Diabetes • Hypertension • Heart Disease</p>
     </div>
@@ -170,11 +150,77 @@
       </div>
     </div>
 
-    <div class="card">
-      <h2 id="currentStation">المحطة الحالية</h2>
-      <h3 id="questionText">سيتم تحميل السؤال هنا</h3>
-      <div id="answers"></div>
-      <div id="feedback"></div>
+    <div class="card question-card">
+      <div id="avatar" class="avatar-wrap">
+        <svg class="avatar-svg" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mr. Samir avatar">
+          <defs>
+            <radialGradient id="skinGradientGame" cx="38%" cy="30%" r="75%">
+              <stop offset="0%" stop-color="#ffe3c4" />
+              <stop offset="65%" stop-color="#f0bd8f" />
+              <stop offset="100%" stop-color="#cf9868" />
+            </radialGradient>
+            <linearGradient id="hairGradientGame" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#eef2fb" />
+              <stop offset="100%" stop-color="#a9b4d6" />
+            </linearGradient>
+            <linearGradient id="gownGradientGame" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#3a4b8f" />
+              <stop offset="100%" stop-color="#1c2650" />
+            </linearGradient>
+            <linearGradient id="pantsGradientGame" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#2b3565" />
+              <stop offset="100%" stop-color="#161c3a" />
+            </linearGradient>
+          </defs>
+          <ellipse class="avatar-shadow" cx="100" cy="300" rx="50" ry="9" />
+          <g class="avatar-figure">
+            <rect class="avatar-leg" x="79" y="200" width="17" height="68" rx="8" fill="url(#pantsGradientGame)" />
+            <rect class="avatar-leg" x="104" y="200" width="17" height="68" rx="8" fill="url(#pantsGradientGame)" />
+            <path class="avatar-foot" d="M72 266 h26 a8 8 0 0 1 8 8 v2 h-40 a6 6 0 0 1 6 -10 Z" fill="#12172e" />
+            <path class="avatar-foot" d="M102 266 h26 a8 8 0 0 1 8 8 v2 h-40 a6 6 0 0 1 6 -10 Z" fill="#12172e" />
+            <path class="avatar-gown" d="M64 128 C64 112 79 102 100 102 C121 102 136 112 136 128 L133 206 C133 214 119 219 100 219 C81 219 67 214 67 206 Z" fill="url(#gownGradientGame)" />
+            <path class="avatar-gown-shade" d="M100 102 C121 102 136 112 136 128 L133 206 C133 214 119 219 100 219 Z" fill="rgba(0,0,0,0.18)" />
+            <path class="avatar-collar" d="M86 104 L100 122 L114 104" fill="none" />
+            <line class="avatar-arm arm-left" x1="70" y1="126" x2="54" y2="188" stroke="url(#skinGradientGame)" />
+            <line class="avatar-arm arm-right" x1="130" y1="126" x2="146" y2="188" stroke="url(#skinGradientGame)" />
+            <circle class="avatar-hand" cx="54" cy="192" r="8" fill="url(#skinGradientGame)" />
+            <circle class="avatar-hand" cx="146" cy="192" r="8" fill="url(#skinGradientGame)" />
+            <path class="avatar-neck" d="M90 82 L90 102 Q100 108 110 102 L110 82 Z" fill="url(#skinGradientGame)" />
+            <g class="head-group">
+              <path class="avatar-hair" d="M64 52 C62 26 78 6 100 6 C122 6 138 26 136 52 C136 40 128 30 118 28 C120 34 118 40 114 42 C110 32 100 28 92 30 C86 32 82 38 82 44 C76 42 70 46 68 54 Z" fill="url(#hairGradientGame)" />
+              <ellipse class="avatar-ear" cx="65" cy="64" rx="6" ry="8" fill="url(#skinGradientGame)" />
+              <ellipse class="avatar-ear" cx="135" cy="64" rx="6" ry="8" fill="url(#skinGradientGame)" />
+              <path class="avatar-head" d="M100 24 C120 24 132 42 132 62 C132 82 122 98 108 104 C105 105.5 102.5 106 100 106 C97.5 106 95 105.5 92 104 C78 98 68 82 68 62 C68 42 80 24 100 24 Z" fill="url(#skinGradientGame)" />
+              <path class="avatar-cheek-shade" d="M100 106 C114 104 124 92 128 76 C130 92 122 104 108 104 C105 105.5 102.5 106 100 106 Z" fill="rgba(150,90,50,0.18)" />
+              <path class="avatar-eyebrow" d="M78 50 Q86 45 94 49" fill="none" />
+              <path class="avatar-eyebrow" d="M106 49 Q114 45 122 50" fill="none" />
+              <path class="avatar-nose" d="M100 54 L96 68 Q100 72 104 68" fill="none" />
+              <g class="face face-normal">
+                <circle class="avatar-eye" cx="86" cy="58" r="3.6" />
+                <circle class="avatar-eye" cx="114" cy="58" r="3.6" />
+                <path class="avatar-mouth" d="M88 80 Q100 83 112 80" />
+              </g>
+              <g class="face face-happy">
+                <path class="avatar-eye-line" d="M80 60 Q86 51 92 60" />
+                <path class="avatar-eye-line" d="M108 60 Q114 51 120 60" />
+                <path class="avatar-mouth" d="M84 78 Q100 96 116 78" />
+              </g>
+              <g class="face face-sad">
+                <path class="avatar-eye-line" d="M80 56 Q86 61 92 56" />
+                <path class="avatar-eye-line" d="M108 56 Q114 61 120 56" />
+                <path class="avatar-mouth" d="M84 88 Q100 74 116 88" />
+                <path class="avatar-tear" d="M114 66 Q118 74 114 80 Q110 74 114 66 Z" />
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="question-content">
+        <h2 id="currentStation">المحطة الحالية</h2>
+        <h3 id="questionText">سيتم تحميل السؤال هنا</h3>
+        <div id="answers"></div>
+        <div id="feedback"></div>
+      </div>
     </div>
   </div>
 
