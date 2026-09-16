@@ -541,7 +541,7 @@ function setLanguage(lang) {
     document.getElementById("journeyTitle").innerHTML = trans.journeyTitle;
     if (!document.getElementById("gameScreen").classList.contains("hidden")) {
       loadQuestion();
-    } else if (!document.getElementById("registrationScreen").classList.contains("hidden")) {
+    } else if (document.getElementById("gameOverScreen").classList.contains("hidden")) {
       document.getElementById("currentStation").innerHTML = trans.currentStationLabel;
       document.getElementById("questionText").innerHTML = trans.questionPlaceholder;
     }
