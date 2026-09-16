@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joining Safe Patient Journey…</title>
+  <style>body{font-family:Arial,sans-serif;background:#0c1230;color:#fff;display:grid;place-items:center;min-height:100vh;margin:0;text-align:center}.card{padding:28px;border-radius:18px;background:#151d46;max-width:420px}p{opacity:.8}</style>
+</head>
+<body>
+  <div class="card"><h2>🏥 Joining game…</h2><p>Please wait a moment.</p></div>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get("session");
+      if (!sessionId || !/^[A-Za-z0-9_-]+$/.test(sessionId)) {
+        document.querySelector(".card").innerHTML = "<h2>Invalid session</h2><p>Please scan the QR code shown on the host screen again.</p>";
+        return;
+      }
+      const playerId = sessionId + "__p_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
+      sessionStorage.setItem("psd_session_id", playerId);
+      sessionStorage.setItem("psd_game_session_id", sessionId);
+      window.location.replace(new URL("index.html", window.location.href).href);
+    })();
+  </script>
+</body>
+</html>
