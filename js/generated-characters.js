@@ -111,4 +111,77 @@
     const finalPatient = document.getElementById('finalPatientArt');
     if (finalPatient) finalPatient.src = patientAssets.correct;
   };
+  const introTranslations = {
+    en: {
+      brand: 'World Patient Safety Day',
+      year: '2026 EDITION',
+      kicker: 'Patient Safety Learning Experience',
+      title: 'Safer care starts with you.',
+      subtitle: 'Choose wisely. Protect every patient.',
+      mission: 'Step into realistic healthcare scenarios, make safety-critical decisions, and discover how every role contributes to safer care.',
+      roles: 'Healthcare roles',
+      real: 'Real',
+      scenarios: 'Safety scenarios',
+      missionStat: 'Shared mission',
+      start: 'Start the journey',
+      think: 'Think safely',
+      decision: 'Every decision matters',
+      care: 'Care together',
+      goal: 'One team, one goal',
+      learn: 'Learn',
+      decide: 'Decide',
+      protect: 'Protect',
+      tagline: 'Different roles. Same goal. Safer patients.',
+      host: 'Open the live host screen ↗'
+    },
+    ar: {
+      brand: 'اليوم العالمي لسلامة المرضى',
+      year: 'نسخة 2026',
+      kicker: 'تجربة تعليمية لسلامة المرضى',
+      title: 'رعاية أكثر أماناً تبدأ بك.',
+      subtitle: 'اختر بحكمة. احمِ كل مريض.',
+      mission: 'عِش مواقف واقعية من بيئة الرعاية الصحية، واتخذ قرارات مهمة للسلامة، واكتشف كيف يساهم كل دور في تقديم رعاية أكثر أماناً.',
+      roles: 'أدوار في الرعاية الصحية',
+      real: 'واقعية',
+      scenarios: 'مواقف سلامة',
+      missionStat: 'مهمة مشتركة',
+      start: 'ابدأ الرحلة',
+      think: 'فكّر بأمان',
+      decision: 'كل قرار يصنع فرقاً',
+      care: 'نتعاون في الرعاية',
+      goal: 'فريق واحد، هدف واحد',
+      learn: 'تعلّم',
+      decide: 'قرّر',
+      protect: 'احمِ',
+      tagline: 'أدوار مختلفة. هدف واحد. مرضى أكثر أماناً.',
+      host: 'افتح شاشة العرض المباشر ↗'
+    }
+  };
+
+  function translateIntro(lang) {
+    const copy = introTranslations[lang] || introTranslations.en;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-intro]').forEach(function (element) {
+      const key = element.getAttribute('data-intro');
+      if (copy[key]) element.textContent = copy[key];
+    });
+    const title = document.getElementById('mainTitle');
+    const subtitle = document.getElementById('subTitle');
+    const mission = document.getElementById('missionText');
+    const host = document.getElementById('hostLinkText');
+    if (title) title.textContent = copy.title;
+    if (subtitle) subtitle.textContent = copy.subtitle;
+    if (mission) mission.textContent = copy.mission;
+    if (host) host.textContent = copy.host;
+  }
+
+  const oldSetLanguage = window.setLanguage;
+  window.setLanguage = function (lang) {
+    oldSetLanguage.apply(this, arguments);
+    translateIntro(lang);
+  };
+
+  translateIntro(typeof language === 'string' ? language : 'ar');
+
 })();
