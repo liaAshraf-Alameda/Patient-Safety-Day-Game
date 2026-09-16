@@ -5,9 +5,34 @@
   font-family: Tahoma, Arial;
 }
 
+:root {
+  --bg-start: #070814;
+  --bg-mid: #160b2f;
+  --bg-end: #03111f;
+  --surface: rgba(12, 18, 44, 0.82);
+  --surface-strong: rgba(18, 27, 60, 0.95);
+  --surface-border: rgba(120, 223, 255, 0.45);
+  --text-primary: #f5f8ff;
+  --text-secondary: #d5dcff;
+  --heading: #8fe8ff;
+  --accent-primary: #00d9ff;
+  --accent-secondary: #b026ff;
+  --accent-highlight: #ff4fd8;
+  --accent-success: #5dff85;
+  --accent-danger: #ff6b7a;
+  --track: rgba(255, 255, 255, 0.1);
+  --shadow-soft: 0 0 25px rgba(0, 217, 255, 0.15);
+  --shadow-strong: 0 0 30px rgba(176, 38, 255, 0.28);
+}
+
 body {
-  background: linear-gradient(135deg, #edf8ff, #dceeff, #f5fbff);
+  background:
+    radial-gradient(circle at top left, rgba(0, 217, 255, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(255, 79, 216, 0.16), transparent 30%),
+    radial-gradient(circle at bottom center, rgba(93, 255, 133, 0.12), transparent 32%),
+    linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
   min-height: 100vh;
+  color: var(--text-primary);
 }
 
 .hidden {
@@ -22,45 +47,77 @@ body {
 }
 
 .card {
-  background: white;
+  background: linear-gradient(180deg, var(--surface), var(--surface-strong));
   margin-top: 20px;
   padding: 25px;
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--shadow-soft), var(--shadow-strong), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
 }
 
 h1, h2, h3 {
   margin-bottom: 15px;
-  color: #005B96;
+  color: var(--heading);
+  text-shadow: 0 0 16px rgba(0, 217, 255, 0.3);
+}
+
+p,
+label,
+#playerInfo,
+#questionText,
+#missionText,
+#patientCondition {
+  color: var(--text-secondary);
 }
 
 button {
-  background: #0078D4;
-  color: white;
+  background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+  color: var(--text-primary);
   border: none;
   padding: 12px 20px;
   border-radius: 10px;
   cursor: pointer;
   margin: 5px;
   font-size: 16px;
-  transition: background 0.3s ease;
+  font-weight: bold;
+  box-shadow: 0 0 18px rgba(0, 217, 255, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
 }
 
 button:hover {
-  background: #005fa3;
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(176, 38, 255, 0.4), 0 0 18px rgba(0, 217, 255, 0.35);
+  filter: brightness(1.05);
+}
+
+button:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent-highlight);
+  outline-offset: 3px;
 }
 
 button:disabled {
-  background: #ccc;
+  background: linear-gradient(135deg, rgba(126, 134, 167, 0.75), rgba(93, 100, 132, 0.85));
   cursor: not-allowed;
+  box-shadow: none;
+  filter: grayscale(0.15);
 }
 
 button.correct {
-  background: #4CAF50;
+  background: linear-gradient(135deg, #19c45c, var(--accent-success));
+  box-shadow: 0 0 22px rgba(93, 255, 133, 0.45);
 }
 
 button.incorrect {
-  background: #f44336;
+  background: linear-gradient(135deg, #ff4765, var(--accent-danger));
+  box-shadow: 0 0 22px rgba(255, 107, 122, 0.42);
 }
 
 input, select {
@@ -69,8 +126,20 @@ input, select {
   margin-top: 10px;
   margin-bottom: 15px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(143, 232, 255, 0.35);
   font-size: 16px;
+  background: rgba(4, 10, 28, 0.75);
+  color: var(--text-primary);
+  box-shadow: inset 0 0 12px rgba(0, 217, 255, 0.08);
+}
+
+input::placeholder {
+  color: rgba(213, 220, 255, 0.7);
+}
+
+option {
+  background: #091226;
+  color: var(--text-primary);
 }
 
 .patient {
@@ -85,17 +154,20 @@ input, select {
 
 .bar {
   height: 25px;
-  background: #ddd;
+  background: var(--track);
   border-radius: 20px;
   overflow: hidden;
   margin: 10px 0;
+  border: 1px solid rgba(143, 232, 255, 0.16);
+  box-shadow: inset 0 0 18px rgba(3, 7, 20, 0.65);
 }
 
 .fill {
   height: 100%;
-  background: green;
+  background: linear-gradient(90deg, var(--accent-highlight), var(--accent-primary), var(--accent-success));
   width: 100%;
   transition: width 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.45);
 }
 
 .station-map {
@@ -106,29 +178,36 @@ input, select {
 
 .station {
   padding: 15px;
-  background: #f2f8fd;
+  background: linear-gradient(180deg, rgba(14, 23, 58, 0.95), rgba(8, 15, 40, 0.95));
   border-radius: 12px;
   font-weight: bold;
   text-align: center;
-  border: 2px solid transparent;
+  color: var(--text-secondary);
+  border: 2px solid rgba(143, 232, 255, 0.18);
   transition: all 0.3s ease;
+  box-shadow: inset 0 0 10px rgba(0, 217, 255, 0.08);
 }
 
 .station.active {
-  background: #FFD700;
-  border-color: #FFA500;
+  background: linear-gradient(135deg, rgba(255, 79, 216, 0.24), rgba(0, 217, 255, 0.28));
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
   transform: scale(1.05);
+  box-shadow: 0 0 26px rgba(0, 217, 255, 0.32);
 }
 
 .station.completed {
-  background: #90EE90;
-  border-color: #228B22;
+  background: linear-gradient(135deg, rgba(39, 212, 116, 0.25), rgba(0, 217, 255, 0.18));
+  border-color: var(--accent-success);
+  color: var(--text-primary);
+  box-shadow: 0 0 20px rgba(93, 255, 133, 0.24);
 }
 
 #avatar {
   font-size: 50px;
   animation: float 2s infinite;
   display: inline-block;
+  text-shadow: 0 0 24px rgba(0, 217, 255, 0.45);
 }
 
 @keyframes float {
@@ -153,6 +232,7 @@ input, select {
 .patient-big {
   font-size: 120px;
   text-align: center;
+  text-shadow: 0 0 28px rgba(255, 79, 216, 0.38);
 }
 
 .hero-left {
@@ -176,18 +256,21 @@ input, select {
   border-radius: 8px;
   font-size: 18px;
   font-weight: bold;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 .feedback.correct {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background: rgba(18, 54, 38, 0.88);
+  color: #d9ffe5;
+  border: 1px solid rgba(93, 255, 133, 0.4);
+  box-shadow: 0 0 20px rgba(93, 255, 133, 0.15);
 }
 
 .feedback.incorrect {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background: rgba(67, 20, 38, 0.9);
+  color: #ffe0e6;
+  border: 1px solid rgba(255, 107, 122, 0.45);
+  box-shadow: 0 0 20px rgba(255, 107, 122, 0.16);
 }
 
 .game-over {
@@ -198,8 +281,9 @@ input, select {
 .score {
   font-size: 48px;
   font-weight: bold;
-  color: #005B96;
+  color: var(--text-primary);
   margin: 20px 0;
+  text-shadow: 0 0 24px rgba(0, 217, 255, 0.45);
 }
 
 @media (max-width: 768px) {
