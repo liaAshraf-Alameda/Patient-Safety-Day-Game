@@ -38,6 +38,55 @@ body.host-body {
   animation: hostPulse 1.4s ease-in-out infinite;
 }
 
+.join-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  max-width: 520px;
+  margin: 0 auto 30px;
+  padding: 18px 26px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--surface), var(--surface-strong));
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--shadow-soft);
+}
+
+.join-panel canvas {
+  border-radius: 10px;
+  background: #f5f8ff;
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.join-panel-text {
+  text-align: left;
+}
+
+.join-panel-text h2 {
+  font-size: 20px;
+  margin-bottom: 4px;
+  color: var(--heading);
+}
+
+.join-panel-text p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  word-break: break-all;
+  max-width: 280px;
+}
+
+@media (max-width: 560px) {
+  .join-panel {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .join-panel-text {
+    text-align: center;
+  }
+}
+
 @keyframes hostPulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.7); }

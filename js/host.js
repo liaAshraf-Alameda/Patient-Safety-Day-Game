@@ -65,7 +65,48 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
+/**
+ * Build the URL players should open on their phones to join the game, based
+ * on wherever this host screen itself is being served from (works over a
+ * local network IP, a real domain, or any static host — just not file://,
+ * since phones can't reach another device's local filesystem).
+ */
+function getJoinUrl() {
+  return new URL("index.html", window.location.href).href;
+}
+
+/**
+ * Render the "Scan to Join" QR code pointing at the game's URL, unless this
+ * page is being viewed as a local file (file://), in which case a QR code
+ * can't help a second device, so show the link as plain text instead.
+ */
+function renderJoinQr() {
+  const joinUrl = getJoinUrl();
+  const urlText = document.getElementById("joinUrlText");
+  const canvas = document.getElementById("joinQrCode");
+
+  if (window.location.protocol === "file:") {
+    canvas.style.display = "none";
+    urlText.innerHTML = "⚠️ Serve this page over http(s) (e.g. a local network URL or web host) for the QR code to work on phones.";
+    return;
+  }
+
+  urlText.textContent = joinUrl;
+
+  if (typeof QRCode === "undefined") {
+    canvas.style.display = "none";
+    urlText.innerHTML += "<br>⚠️ QR code library failed to load.";
+    return;
+  }
+
+  QRCode.toCanvas(canvas, joinUrl, { width: 160, margin: 1, color: { dark: "#0c1230", light: "#f5f8ff" } }, err => {
+    if (err) console.error("Failed to render join QR code", err);
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
+  renderJoinQr();
+
   if (typeof firebaseDb === "undefined" || !firebaseDb) {
     document.getElementById("leaderboard").innerHTML =
       '<div class="leaderboard-empty">⚠️ Could not connect to Firebase. Check js/firebase-config.js.</div>';
