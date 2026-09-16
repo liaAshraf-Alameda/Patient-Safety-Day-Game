@@ -105,6 +105,10 @@ function updateRoleAwards(groups) {
   });
 
   const activeGroups = groups.filter(group => group.participants > 0);
+  if (!activeGroups.length) {
+    resetRoleAwards();
+    return;
+  }
   const highest = (activeGroups.length ? activeGroups : groups).slice().sort((a, b) => b.collectiveScore - a.collectiveScore || b.averageScore - a.averageScore)[0];
   const improved = (activeGroups.length ? activeGroups : groups).slice().sort((a, b) => b.improvement - a.improvement || b.collectiveScore - a.collectiveScore)[0];
   const care = (activeGroups.length ? activeGroups : groups).slice().sort((a, b) => b.patientCenteredScore - a.patientCenteredScore || b.collectiveScore - a.collectiveScore)[0];
