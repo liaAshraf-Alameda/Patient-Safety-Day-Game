@@ -86,6 +86,13 @@ Patient-Safety-Day-Game/
 ## Live Host Scoreboard
 Open `host.html` on a projector or shared screen during the event to show a live, auto-updating leaderboard of everyone currently playing (name, role/department, current station, safety/trust scores, and status). Each player's browser session pushes its progress to a Firebase Realtime Database as they play (see `js/firebase-config.js`), and `host.html`/`js/host.js` subscribe to it live — no manual refresh needed. A "📺 Open live host screen" link is available on the welcome screen.
 
+### Securing the database
+`database.rules.json` (deployed via `firebase.json`) restricts reads/writes to only the `players` path (used by the live scoreboard) and validates the shape of each write; every other path is locked down. Apply these rules with either method:
+- **Firebase Console**: open your project → Build → Realtime Database → Rules tab → paste the contents of `database.rules.json` → Publish.
+- **Firebase CLI**: `npm install -g firebase-tools`, then `firebase login`, then from this folder run `firebase deploy --only database` (using project `patient-safety-day-game`).
+
+Note: since the game has no user accounts, any visitor with the site's Firebase config can still write to the `players` path (this is required for the no-login live scoreboard to work). The rules only prevent access to unrelated database paths and malformed payloads — they don't add per-player authentication.
+
 ## Future Enhancements
 - Multiple difficulty levels
 - Timed challenges
