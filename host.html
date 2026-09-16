@@ -6,6 +6,15 @@
   <title>Safe Patient Journey — Live Scoreboard</title>
   <link rel="stylesheet" href="css/style.css?v=20260916b">
   <link rel="stylesheet" href="css/host.css?v=20260916b">
+  <style>
+    .leaderboard-row.role-row{grid-template-columns:60px 1.3fr 150px 1.4fr 120px}
+    .role-participants{display:flex;flex-direction:column;text-align:center;color:var(--text-secondary)}
+    .role-participants strong{font-size:28px;color:var(--heading)}
+    .role-participants span{font-size:12px}
+    .role-average{text-align:center;font-size:26px;font-weight:800;color:var(--accent-success)}
+    .join-panel-text button{margin-top:10px}
+    @media(max-width:900px){.leaderboard-row.role-row{grid-template-columns:1fr}.role-average{font-size:22px}}
+  </style>
 </head>
 <body class="host-body">
   <div class="host-header">
