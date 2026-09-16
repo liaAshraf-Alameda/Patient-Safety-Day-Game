@@ -504,6 +504,15 @@ function getActiveQuestions() {
   return isWHOChallenge ? questions["WHOChallenges"] : (questions[selectedRole] || questions["WHOChallenges"]);
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function updateCurrentStationLabel() {
   const currentQuestion = getActiveQuestions()[currentQuestionIndex];
   if (currentQuestion) {
@@ -572,8 +581,8 @@ function updateRoleOptions(lang) {
 function getPlayerInfoText() {
   const roleLabel = roleLabels[language][player.role] || player.role;
   return language === "ar"
-    ? `<strong>${player.name}</strong> - ${roleLabel} في ${player.department}`
-    : `<strong>${player.name}</strong> - ${roleLabel} in ${player.department}`;
+    ? `<strong>${escapeHtml(player.name)}</strong> - ${escapeHtml(roleLabel)} في ${escapeHtml(player.department)}`
+    : `<strong>${escapeHtml(player.name)}</strong> - ${escapeHtml(roleLabel)} in ${escapeHtml(player.department)}`;
 }
 
 /**

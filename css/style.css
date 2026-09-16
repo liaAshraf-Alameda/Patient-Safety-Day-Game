@@ -108,6 +108,14 @@ input::placeholder {
   color: #c7d8ee;
 }
 
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #7df9ff;
+  outline-offset: 3px;
+  border-color: #7df9ff;
+  box-shadow: 0 0 16px rgba(0, 234, 255, 0.28), inset 0 0 10px rgba(0, 234, 255, 0.12);
+}
+
 .patient {
   font-size: 90px;
 }
