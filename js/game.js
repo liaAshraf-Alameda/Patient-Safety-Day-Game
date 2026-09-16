@@ -500,6 +500,19 @@ const roleLabels = {
   }
 };
 
+function getActiveQuestions() {
+  return isWHOChallenge ? questions["WHOChallenges"] : (questions[selectedRole] || questions["WHOChallenges"]);
+}
+
+function updateCurrentStationLabel() {
+  const currentQuestion = getActiveQuestions()[currentQuestionIndex];
+  if (currentQuestion) {
+    document.getElementById("currentStation").innerHTML = language === "ar"
+      ? `المحطة: ${currentQuestion.station}`
+      : `Station: ${currentQuestion.station}`;
+  }
+}
+
 /**
  * Set the game language
  */
@@ -536,7 +549,7 @@ function setLanguage(lang) {
     document.getElementById("trustLabel").innerHTML = trans.trustLabel;
     document.getElementById("journeyTitle").innerHTML = trans.journeyTitle;
     if (!document.getElementById("gameScreen").classList.contains("hidden")) {
-      loadQuestion();
+      updateCurrentStationLabel();
     }
   }
 
@@ -600,7 +613,7 @@ function startGame() {
  * Load a specific question based on player role
  */
 function loadQuestion() {
-  const roleQuestions = isWHOChallenge ? questions["WHOChallenges"] : (questions[selectedRole] || questions["WHOChallenges"]);
+  const roleQuestions = getActiveQuestions();
   
   if (currentQuestionIndex >= roleQuestions.length) {
     // If we just finished role questions, move to WHO Challenge
@@ -615,7 +628,7 @@ function loadQuestion() {
 
   const question = roleQuestions[currentQuestionIndex];
 
-  document.getElementById("currentStation").innerHTML = language === "ar" ? `المحطة: ${question.station}` : `Station: ${question.station}`;
+  updateCurrentStationLabel();
   document.getElementById("questionText").innerHTML = question.question;
 
   document.getElementById("answers").innerHTML = "";
