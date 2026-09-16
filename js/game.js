@@ -504,15 +504,6 @@ function getActiveQuestions() {
   return isWHOChallenge ? questions["WHOChallenges"] : (questions[selectedRole] || questions["WHOChallenges"]);
 }
 
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
 function updateCurrentStationLabel() {
   const currentQuestion = getActiveQuestions()[currentQuestionIndex];
   if (currentQuestion) {
@@ -567,7 +558,7 @@ function setLanguage(lang) {
     document.getElementById("finalMessage").innerHTML = trans.finalMessage;
     document.getElementById("playAgainBtn").innerHTML = trans.playAgainBtn;
     if (!document.getElementById("gameOverScreen").classList.contains("hidden") && player.name) {
-      document.getElementById("playerInfo").innerHTML = getPlayerInfoText();
+      updatePlayerInfo();
     }
   }
 }
@@ -578,11 +569,12 @@ function updateRoleOptions(lang) {
   });
 }
 
-function getPlayerInfoText() {
+function updatePlayerInfo() {
   const roleLabel = roleLabels[language][player.role] || player.role;
-  return language === "ar"
-    ? `<strong>${escapeHtml(player.name)}</strong> - ${escapeHtml(roleLabel)} في ${escapeHtml(player.department)}`
-    : `<strong>${escapeHtml(player.name)}</strong> - ${escapeHtml(roleLabel)} in ${escapeHtml(player.department)}`;
+  document.getElementById("playerInfoName").textContent = player.name;
+  document.getElementById("playerInfoDetails").textContent = language === "ar"
+    ? ` - ${roleLabel} في ${player.department}`
+    : ` - ${roleLabel} in ${player.department}`;
 }
 
 /**
@@ -733,7 +725,7 @@ function endGame() {
   const totalQuestions = roleQuestions.length + whoQuestions.length;
   const finalScore = Math.round((answeredCorrectly / totalQuestions) * 100);
   document.getElementById("finalScore").innerHTML = finalScore + "%";
-  document.getElementById("playerInfo").innerHTML = getPlayerInfoText();
+  updatePlayerInfo();
 }
 
 function saveScoreAndReload() {
