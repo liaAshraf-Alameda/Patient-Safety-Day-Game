@@ -75,8 +75,8 @@
     }
 
     if (patient) {
-      patient.hidden = key === 'WHOChallenges';
-      if (key !== 'WHOChallenges') setPatientState(patientState || 'thinking');
+      patient.hidden = false;
+      setPatientState(key === 'WHOChallenges' ? 'correct' : (patientState || 'thinking'));
     }
 
     if (gameScreen) gameScreen.setAttribute('data-role-art', key.toLowerCase());
@@ -108,5 +108,7 @@
     oldEnd.apply(this, arguments);
     const final = document.getElementById('finalTeamArt');
     if (final) final.src = assets.WHOChallenges.character;
+    const finalPatient = document.getElementById('finalPatientArt');
+    if (finalPatient) finalPatient.src = patientAssets.correct;
   };
 })();
