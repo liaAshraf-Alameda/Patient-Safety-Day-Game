@@ -80,6 +80,102 @@ const questions = {
       options_en: ["Provide the patient with educational materials", "Explain the condition in simple language and confirm understanding", "Schedule a follow-up appointment to discuss the case"],
       explanation_en: "Patient engagement starts with understanding.",
       voice_en: "Please explain my condition."
+    },
+    {
+      station: "Clinic",
+      question: "عم سمير يتناول دواء أعشاب من الصيدلية الشعبية دون علم الفريق الطبي، وهو حالياً على مميعات دم.",
+      options: ["تجاهل الأمر لأنه ليس دواءً موصوفاً", "التحقق من التفاعلات الدوائية المحتملة وتوثيق الدواء في الملف", "طلب إيقافه فوراً دون شرح السبب"],
+      correct: 1,
+      explanation: "المكملات العشبية قد تتفاعل مع الأدوية الموصوفة وتزيد خطر النزيف؛ يجب فحصها وتوثيقها كأي دواء آخر.",
+      voice: "أتناول بعض الأعشاب التقليدية أيضاً.",
+      question_en: "Mr. Samir is taking an herbal remedy from a traditional pharmacy without the care team's knowledge, while currently on blood thinners.",
+      options_en: ["Ignore it since it isn't a prescribed medication", "Check for potential drug interactions and document it in the record", "Ask him to stop it immediately without explaining why"],
+      explanation_en: "Herbal supplements can interact with prescribed medications and increase bleeding risk; they must be reviewed and documented like any other medication.",
+      voice_en: "I'm also taking some traditional herbs."
+    },
+    {
+      station: "Ward",
+      question: "نتيجة تحليل مخبري حرجة وصلت للمريض في الساعة الثالثة فجراً، والمريض مستقر ظاهرياً.",
+      options: ["الانتظار حتى الجولة الصباحية لمناقشتها", "تقييم المريض فوراً والتواصل مع الفريق المعالج وفق سياسة الإبلاغ عن القيم الحرجة", "تسجيل النتيجة في الملف فقط"],
+      correct: 1,
+      explanation: "القيم الحرجة تتطلب إبلاغاً وتقييماً فورياً بغض النظر عن الوقت أو استقرار المريض الظاهري.",
+      voice: "هل كل شيء على ما يرام؟",
+      question_en: "A critical lab result arrives for the patient at 3 a.m., and the patient appears stable.",
+      options_en: ["Wait until the morning round to discuss it", "Assess the patient immediately and notify the care team per the critical value reporting policy", "Just record the result in the file"],
+      explanation_en: "Critical values require immediate reporting and assessment regardless of the time or the patient's apparent stability.",
+      voice_en: "Is everything alright?"
+    },
+    {
+      station: "Clinic",
+      question: "لدى عم سمير موعدان في نفس اليوم مع طبيبين مختلفين أوصى كل منهما بتعديل جرعة دواء مختلف لنفس الحالة، دون أن يعلم أحدهما بقرار الآخر.",
+      options: ["اتباع تعليمات آخر طبيب تمت رؤيته", "التواصل بين الطبيبين لتوحيد خطة العلاج قبل أي تعديل", "ترك القرار للمريض ليختار"],
+      correct: 1,
+      explanation: "تعارض الخطط العلاجية يتطلب تنسيقاً مباشراً بين مقدمي الرعاية لتجنب ازدواجية أو تضارب العلاج.",
+      voice: "كل طبيب يقول لي شيئاً مختلفاً.",
+      question_en: "Mr. Samir has two same-day appointments with different doctors, each recommending a different dose change for the same condition, without either knowing about the other's decision.",
+      options_en: ["Follow the instructions of whichever doctor he saw last", "Have the two doctors communicate to align the treatment plan before any change", "Leave the decision to the patient to choose"],
+      explanation_en: "Conflicting treatment plans require direct coordination between providers to avoid duplicate or contradictory therapy.",
+      voice_en: "Each doctor tells me something different."
+    },
+    {
+      station: "Ward",
+      question: "أثناء الجولة، يطلب عم سمير معرفة سبب تغيير خطة العلاج قبل أن يوافق على الاستمرار فيها.",
+      options: ["إخباره أن القرار طبي بحت ولا حاجة للنقاش", "شرح الأساس المنطقي للتغيير وإشراكه في القرار", "تأجيل الشرح إلى ما بعد تنفيذ الخطة"],
+      correct: 1,
+      explanation: "اتخاذ القرار المشترك يتطلب شرح الأساس المنطقي للمريض قبل تنفيذ أي تغيير في خطته العلاجية.",
+      voice: "أريد أن أفهم سبب هذا التغيير قبل أن أوافق.",
+      question_en: "During rounds, Mr. Samir asks why his treatment plan is changing before he agrees to continue it.",
+      options_en: ["Tell him it's a purely medical decision that doesn't need discussion", "Explain the rationale for the change and involve him in the decision", "Postpone the explanation until after the plan is implemented"],
+      explanation_en: "Shared decision-making requires explaining the rationale to the patient before implementing any change to his treatment plan.",
+      voice_en: "I want to understand why before I agree."
+    },
+    {
+      station: "Consultation",
+      question: "لاحظت أن نتيجة فحص تصويري سابق للمريض لم تُراجع من قبل أي فريق منذ أسبوعين، رغم وجود ملاحظة غير طبيعية فيها.",
+      options: ["افتراض أن الفريق السابق تعامل معها", "مراجعة النتيجة فوراً واتخاذ الإجراء المناسب وتوثيق المتابعة", "الانتظار حتى الموعد القادم المجدول"],
+      correct: 1,
+      explanation: "النتائج غير المتابَعة (Failure to follow up) من أخطر أسباب تأخر التشخيص؛ يجب إغلاق الحلقة فوراً.",
+      voice: "هل تمت مراجعة نتيجة الأشعة التي أجريتها؟",
+      question_en: "You notice a prior imaging result flagged with an abnormal finding has not been reviewed by any team for two weeks.",
+      options_en: ["Assume the previous team already handled it", "Review the result immediately, take appropriate action, and document the follow-up", "Wait until the next scheduled appointment"],
+      explanation_en: "Failure to follow up on results is a leading cause of diagnostic delay; the loop must be closed immediately.",
+      voice_en: "Was the result of my imaging test reviewed?"
+    },
+    {
+      station: "Clinic",
+      question: "عم سمير يرفض إجراء تشخيصياً موصى به بشدة، ويقول إنه لا يثق بنتائجه بسبب تجربة سابقة سيئة.",
+      options: ["إجبار المريض على الإجراء لأنه ضروري طبياً", "استكشاف مخاوفه، تقديم معلومات واضحة، واحترام قراره النهائي إن استمر بالرفض", "تجاهل رفضه وتسجيله كإجراء تم"],
+      correct: 1,
+      explanation: "احترام استقلالية المريض (Patient Autonomy) مع ضمان أنه اتخذ قراراً مستنيراً هو جوهر الرعاية الأخلاقية والآمنة.",
+      voice: "لن أكرر تلك التجربة مرة أخرى.",
+      question_en: "Mr. Samir refuses a strongly recommended diagnostic procedure, saying he doesn't trust the results due to a past bad experience.",
+      options_en: ["Force the patient to undergo the procedure because it is medically necessary", "Explore his concerns, provide clear information, and respect his final decision if he still refuses", "Ignore his refusal and record the procedure as completed"],
+      explanation_en: "Respecting patient autonomy while ensuring an informed decision is the core of ethical and safe care.",
+      voice_en: "I won't go through that experience again."
+    },
+    {
+      station: "Ward",
+      question: "طبيب مقيم جديد كتب أمراً دوائياً بجرعة تبدو مرتفعة بشكل غير معتاد لحالة عم سمير، والممرضة المسؤولة غير متأكدة إن كان هذا مقصوداً.",
+      options: ["تنفيذ الأمر كما هو لأن الطبيب هو من كتبه", "التواصل مباشرة مع الطبيب لتوضيح الجرعة قبل التنفيذ", "تقليل الجرعة تلقائياً دون استشارة أحد"],
+      correct: 1,
+      explanation: "أي شك حول أمر دوائي يستوجب التحقق المباشر مع الطبيب الواصف قبل التنفيذ؛ ثقافة الأمان تشجع على طرح الأسئلة.",
+      voice: "أثق أن الفريق سيتأكد من دوائي.",
+      question_en: "A new resident doctor wrote a medication order with an unusually high dose for Mr. Samir's condition, and the responsible nurse isn't sure if it's intentional.",
+      options_en: ["Execute the order as written since the doctor wrote it", "Contact the doctor directly to clarify the dose before administering it", "Automatically reduce the dose without consulting anyone"],
+      explanation_en: "Any doubt about a medication order requires direct verification with the prescriber before administration; a safety culture encourages speaking up.",
+      voice_en: "I trust the team will make sure my medication is right."
+    },
+    {
+      station: "Consultation",
+      question: "عم سمير يعاني من ثلاث حالات مزمنة يتابعها ثلاثة أطباء مختلفين، ولا توجد خطة رعاية موحدة بينهم.",
+      options: ["ترك كل طبيب يدير حالته المزمنة بشكل منفصل", "تنسيق خطة رعاية شاملة بين الأطباء الثلاثة تأخذ جميع الحالات بعين الاعتبار", "الاكتفاء بمراجعة أحدث تقرير طبي فقط"],
+      correct: 1,
+      explanation: "المرضى متعددو الأمراض المزمنة معرضون لخطر التعارض الدوائي والعلاجي دون تنسيق فعّال بين مقدمي الرعاية.",
+      voice: "أشعر أحياناً أن كل طبيب يعالج جزءاً مختلفاً مني.",
+      question_en: "Mr. Samir has three chronic conditions followed by three different doctors, with no unified care plan between them.",
+      options_en: ["Let each doctor manage his chronic condition separately", "Coordinate a comprehensive care plan among the three doctors that accounts for all conditions", "Just review the most recent medical report"],
+      explanation_en: "Patients with multiple chronic conditions are at risk of treatment conflicts without effective coordination among providers.",
+      voice_en: "Sometimes I feel like each doctor treats a different part of me."
     }
   ],
   Nurse: [
@@ -94,6 +190,114 @@ const questions = {
       options_en: ["Remind the patient to ask for help", "Assess fall risk and apply fall prevention measures", "Inform the doctor"],
       explanation_en: "Fall risk assessment is the safest action.",
       voice_en: "I'm afraid of falling."
+    },
+    {
+      station: "Ward",
+      question: "أثناء إعطاء الدواء، لاحظت أن اسم المريض على السوار يختلف قليلاً عن الاسم في بطاقة الدواء (خطأ إملائي بسيط في اسم العائلة).",
+      options: ["المتابعة لأن باقي البيانات مطابقة", "التوقف والتحقق من الهوية بمعرفين مستقلين قبل الإعطاء", "سؤال المريض عن اسمه شفهياً فقط"],
+      correct: 1,
+      explanation: "أي تباين، مهما بدا بسيطاً، يستوجب التوقف والتحقق الكامل من الهوية قبل إعطاء أي دواء.",
+      voice: "أنا متأكد أن هذا دوائي.",
+      question_en: "While administering medication, you notice the patient's wristband name differs slightly from the medication card (a minor spelling error in the last name).",
+      options_en: ["Proceed since the rest of the data matches", "Stop and verify identity with two independent identifiers before administering", "Just ask the patient to state his name verbally"],
+      explanation_en: "Any discrepancy, however minor, requires stopping for full identity verification before giving any medication.",
+      voice_en: "I'm sure this is my medication."
+    },
+    {
+      station: "Ward",
+      question: "لاحظت أن ضغط طرد مضخة التسريب الوريدي (IV pump) يصدر تنبيهاً متكرراً، لكن المريض نائم ويبدو مرتاحاً.",
+      options: ["كتم التنبيه لعدم إزعاج المريض", "فحص خط التسريب وموقع الإبرة فوراً لتحديد سبب التنبيه", "الانتظار حتى يستيقظ المريض"],
+      correct: 1,
+      explanation: "تنبيهات مضخات التسريب قد تشير لانسداد أو تسرب أو ارتشاح؛ يجب التحقق الفوري بغض النظر عن حالة المريض الظاهرية.",
+      voice: "لم أشعر بأي شيء غير عادي.",
+      question_en: "You notice the IV pump is giving a repeated occlusion alarm, but the patient is asleep and appears comfortable.",
+      options_en: ["Silence the alarm to avoid disturbing the patient", "Check the IV line and insertion site immediately to identify the cause", "Wait until the patient wakes up"],
+      explanation_en: "Infusion pump alarms can indicate a blockage, leak, or infiltration; immediate verification is required regardless of how the patient appears.",
+      voice_en: "I didn't feel anything unusual."
+    },
+    {
+      station: "Ward",
+      question: "عم سمير يطلب منك عدم إخبار أسرته بتفاصيل حالته الصحية، لكن أحد أفراد الأسرة يصر على معرفة كل التفاصيل مباشرة منك.",
+      options: ["إخبار الأسرة لأنهم مسؤولون عن رعايته", "احترام رغبة المريض في الخصوصية وتوجيه الأسرة له مباشرة", "إعطاء معلومات جزئية لإرضاء الطرفين"],
+      correct: 1,
+      explanation: "سرية معلومات المريض حق أساسي؛ يجب احترام تفضيلاته حول من يمكن مشاركة معلوماته معه.",
+      voice: "أفضل أن أخبر أسرتي بنفسي.",
+      question_en: "Mr. Samir asks you not to tell his family details about his condition, but a family member insists on getting all the details directly from you.",
+      options_en: ["Tell the family since they are responsible for his care", "Respect the patient's wish for privacy and direct the family to speak with him", "Give partial information to satisfy both sides"],
+      explanation_en: "Patient confidentiality is a fundamental right; his preferences on who can be told must be respected.",
+      voice_en: "I'd rather tell my family myself."
+    },
+    {
+      station: "Ward",
+      question: "أثناء تسليم المناوبة (Handover)، شعرت أن الممرضة السابقة تسرعت في نقل المعلومات ولم تذكر تفاصيل عن تغيير حديث في خطة العلاج.",
+      options: ["الاكتفاء بما ذُكر لتجنب الإحراج", "طرح أسئلة توضيحية والتأكد من اكتمال المعلومات قبل استلام المسؤولية", "مراجعة الملف بنفسك لاحقاً دون سؤال"],
+      correct: 1,
+      explanation: "التسليم الآمن للمناوبة يتطلب التأكد من اكتمال المعلومات الحرجة، وطرح الأسئلة جزء أساسي من ثقافة الأمان.",
+      voice: "أتمنى أن يعرف الفريق الجديد كل ما حدث معي.",
+      question_en: "During handover, you sense the previous nurse rushed through the information and didn't mention a recent change in the treatment plan.",
+      options_en: ["Accept what was said to avoid awkwardness", "Ask clarifying questions and confirm the information is complete before taking responsibility", "Review the file yourself later without asking"],
+      explanation_en: "Safe handover requires confirming critical information is complete, and asking questions is a core part of a safety culture.",
+      voice_en: "I hope the new team knows everything that happened to me."
+    },
+    {
+      station: "Ward",
+      question: "عم سمير يعاني من ألم متزايد لكنه يرفض تناول المسكن الموصوف خوفاً من الإدمان.",
+      options: ["إعطاؤه المسكن رغماً عنه لأنه ضروري", "شرح المخاطر والفوائد بوضوح واحترام قراره مع طرح بدائل ممكنة", "تجاهل شكواه من الألم لأنه قرر الرفض"],
+      correct: 1,
+      explanation: "إدارة الألم تتطلب توازناً بين التثقيف الصحيح واحترام مخاوف المريض وقراره المستنير.",
+      voice: "لا أريد أن أصبح معتمداً على المسكنات.",
+      question_en: "Mr. Samir has increasing pain but refuses the prescribed painkiller, fearing addiction.",
+      options_en: ["Give him the painkiller against his will because it's necessary", "Clearly explain the risks and benefits, respect his decision, and offer possible alternatives", "Ignore his pain complaint since he decided to refuse"],
+      explanation_en: "Pain management requires balancing correct education with respecting the patient's concerns and informed decision.",
+      voice_en: "I don't want to become dependent on painkillers."
+    },
+    {
+      station: "Ward",
+      question: "لاحظت احمراراً وتورماً طفيفاً حول موقع القسطرة الوريدية لعم سمير، لكنه لا يشتكي من ألم.",
+      options: ["تجاهل الأمر لعدم وجود شكوى من الألم", "تقييم موقع القسطرة فوراً واتخاذ الإجراء المناسب (إزالة أو استبدال عند الحاجة)", "الانتظار حتى الجولة القادمة لتقييمه"],
+      correct: 1,
+      explanation: "علامات الالتهاب أو التسرب حول القسطرة تتطلب تقييماً فورياً حتى دون وجود ألم، لمنع المضاعفات مثل التهاب الوريد.",
+      voice: "لا أشعر بألم يُذكر.",
+      question_en: "You notice slight redness and swelling around Mr. Samir's IV catheter site, but he doesn't complain of pain.",
+      options_en: ["Ignore it since there's no pain complaint", "Assess the catheter site immediately and take appropriate action (remove or replace if needed)", "Wait until the next round to assess it"],
+      explanation_en: "Signs of inflammation or infiltration around a catheter require immediate assessment even without pain, to prevent complications like phlebitis.",
+      voice_en: "I don't feel much pain."
+    },
+    {
+      station: "Ward",
+      question: "عم سمير يطلب الخروج من المستشفى ضد نصيحة الفريق الطبي (Discharge against medical advice) بسبب التزامات عائلية.",
+      options: ["منعه من المغادرة لأنه قرار خطير", "شرح المخاطر بوضوح، توثيق القرار، وتقديم خطة متابعة آمنة إن أصر", "السماح له بالمغادرة دون أي توثيق أو شرح"],
+      correct: 1,
+      explanation: "احترام حق المريض في اتخاذ القرار يجب أن يقترن بتوثيق دقيق وشرح واضح للمخاطر وخطة متابعة آمنة قدر الإمكان.",
+      voice: "يجب أن أكون مع عائلتي الآن.",
+      question_en: "Mr. Samir wants to leave the hospital against medical advice due to family obligations.",
+      options_en: ["Prevent him from leaving since it's a dangerous decision", "Clearly explain the risks, document the decision, and provide a safe follow-up plan if he insists", "Let him leave without any documentation or explanation"],
+      explanation_en: "Respecting a patient's right to decide must be paired with careful documentation, a clear risk explanation, and the safest possible follow-up plan.",
+      voice_en: "I need to be with my family right now."
+    },
+    {
+      station: "Ward",
+      question: "أثناء تقييم علامات عم سمير الحيوية، وجدت أن ضغط الدم أعلى من المعتاد له، لكن ليس بمستوى حرج، والمريض لا يشتكي من أي أعراض.",
+      options: ["تسجيل القيمة فقط دون أي إجراء إضافي", "إعادة القياس، مقارنة الاتجاه بالقراءات السابقة، وإبلاغ الفريق المعالج إذا استمر الارتفاع", "تجاهلها لأنها ليست حرجة"],
+      correct: 1,
+      explanation: "التغيرات غير الحرجة قد تكون مؤشراً مبكراً على تدهور الحالة؛ متابعة الاتجاه والإبلاغ المبكر يمنعان المضاعفات.",
+      voice: "أشعر أنني بخير تماماً.",
+      question_en: "While assessing Mr. Samir's vital signs, you find his blood pressure higher than his usual baseline, though not at a critical level, and he reports no symptoms.",
+      options_en: ["Just record the value with no further action", "Recheck it, compare the trend to previous readings, and notify the care team if the rise persists", "Ignore it since it isn't critical"],
+      explanation_en: "Non-critical changes can be an early warning sign of deterioration; trend monitoring and early reporting prevent complications.",
+      voice_en: "I feel completely fine."
+    },
+    {
+      station: "Ward",
+      question: "عم سمير طلب منك تسريع سرعة قطرة المحلول الوريدي بنفسه ليشعر بتحسن أسرع، وهو غير مدرك للمخاطر المرتبطة بحالته القلبية.",
+      options: ["تنفيذ طلبه لإرضائه فوراً", "شرح المخاطر المرتبطة بتغيير السرعة الموصوفة ورفض تنفيذ التغيير دون أمر طبي", "زيادة السرعة قليلاً كحل وسط"],
+      correct: 1,
+      explanation: "معدل التسريب الوريدي يُحدد بدقة وفق الحالة السريرية، خاصة لمرضى القلب، وأي تعديل يتطلب أمراً طبياً موثقاً.",
+      voice: "أريد أن أشعر بتحسن بشكل أسرع.",
+      question_en: "Mr. Samir asks you to speed up his IV drip himself so he feels better faster, unaware of the risks given his heart condition.",
+      options_en: ["Carry out his request immediately to satisfy him", "Explain the risks of changing the prescribed rate and decline to alter it without a medical order", "Increase the rate slightly as a compromise"],
+      explanation_en: "IV infusion rates are precisely set based on the clinical condition, especially for cardiac patients, and any change requires a documented medical order.",
+      voice_en: "I want to feel better faster."
     }
   ],
   Pharmacist: [
@@ -108,6 +312,114 @@ const questions = {
       options_en: ["Review the prescription", "Verify identity using two identifiers", "Review the medication record"],
       explanation_en: "Identity verification prevents medication errors.",
       voice_en: "Is this my medication?"
+    },
+    {
+      station: "Pharmacy",
+      question: "وصفة عم سمير تحتوي على دواء جديد قد يتفاعل بشكل خطير مع أحد أدويته المزمنة، والطبيب الواصف غير متاح حالياً.",
+      options: ["صرف الدواء لأن الوصفة موقعة من طبيب", "إيقاف الصرف مؤقتاً والتواصل مع الطبيب أو بديله لتوضيح التفاعل قبل المتابعة", "تحذير المريض شفهياً وصرف الدواء على مسؤوليته"],
+      correct: 1,
+      explanation: "التفاعلات الدوائية الخطيرة تستوجب إيقاف الصرف والتحقق مع الفريق الطبي قبل المتابعة، بغض النظر عن توقيع الوصفة.",
+      voice: "الطبيب وصف لي هذا الدواء، أليس كذلك؟",
+      question_en: "Mr. Samir's prescription includes a new drug that could seriously interact with one of his chronic medications, and the prescribing doctor is currently unavailable.",
+      options_en: ["Dispense the medication because the prescription is signed by a doctor", "Hold dispensing and contact the doctor or a covering physician to clarify the interaction first", "Verbally warn the patient and dispense it at his own risk"],
+      explanation_en: "Serious drug interactions require holding the dispensing and verifying with the medical team first, regardless of the prescription being signed.",
+      voice_en: "The doctor prescribed this for me, didn't he?"
+    },
+    {
+      station: "Pharmacy",
+      question: "لاحظت أن جرعة الدواء الموصوفة لعم سمير تبدو مضاعفة عن الجرعة المعتادة لحالته وعمره، دون سبب واضح موثق.",
+      options: ["الصرف كما هو لأن القرار يعود للطبيب فقط", "التواصل مع الطبيب لتوضيح سبب الجرعة قبل الصرف", "تخفيض الجرعة تلقائياً إلى المعتاد"],
+      correct: 1,
+      explanation: "الصيدلي جزء أساسي من نظام الأمان الدوائي، والتحقق من الجرعات غير المعتادة قبل الصرف يمنع أخطاء جسيمة.",
+      voice: "أثق أن الطبيب يعرف ما يفعله.",
+      question_en: "You notice the dose prescribed for Mr. Samir appears double the usual dose for his condition and age, with no clear documented reason.",
+      options_en: ["Dispense as written since it's solely the doctor's decision", "Contact the doctor to clarify the reason for the dose before dispensing", "Automatically reduce the dose to the usual amount"],
+      explanation_en: "The pharmacist is a key part of the medication safety system, and verifying unusual doses before dispensing prevents serious errors.",
+      voice_en: "I trust the doctor knows what he's doing."
+    },
+    {
+      station: "Pharmacy",
+      question: "عم سمير يطلب صرف دواء انتهت صلاحية وصفته منذ أسبوعين، ويقول إنه بحاجة ماسة له اليوم.",
+      options: ["الصرف مباشرة لأن الحاجة عاجلة", "التواصل مع الطبيب لتجديد الوصفة أو التأكد من استمرارية العلاج قبل الصرف", "رفض الطلب دون تقديم أي بديل"],
+      correct: 1,
+      explanation: "صرف دواء بوصفة منتهية الصلاحية دون تجديد أو تأكيد طبي قد يعرض المريض لعلاج غير مناسب لحالته الحالية.",
+      voice: "لا يمكنني الانتظار، أحتاج هذا الدواء اليوم.",
+      question_en: "Mr. Samir asks to fill a medication whose prescription expired two weeks ago, saying he urgently needs it today.",
+      options_en: ["Dispense it immediately since the need is urgent", "Contact the doctor to renew the prescription or confirm continued treatment before dispensing", "Refuse the request without offering any alternative"],
+      explanation_en: "Dispensing on an expired prescription without renewal or medical confirmation may expose the patient to therapy that no longer fits his current condition.",
+      voice_en: "I can't wait, I need this medication today."
+    },
+    {
+      station: "Pharmacy",
+      question: "أثناء إعداد جرعة الدواء الوريدي لعم سمير، لاحظت أن التركيز المكتوب على الوصفة غير معتاد ويمكن أن يُقرأ بأكثر من طريقة.",
+      options: ["الاعتماد على خبرتك في تفسير الوصفة", "التوقف والتواصل مع الطبيب الواصف لتوضيح التركيز المقصود بدقة", "استخدام التركيز الأكثر شيوعاً في المستشفى"],
+      correct: 1,
+      explanation: "غموض الوصفة يستوجب التوقف الفوري والتحقق المباشر مع الطبيب؛ الافتراض في مثل هذه الحالات خطر جسيم على سلامة المريض.",
+      voice: "أثق أن الجرعة صحيحة كما هي مكتوبة.",
+      question_en: "While preparing Mr. Samir's IV medication dose, you notice the concentration written on the prescription is unusual and could be read more than one way.",
+      options_en: ["Rely on your experience to interpret the prescription", "Stop and contact the prescribing doctor to clarify the exact intended concentration", "Use whichever concentration is most commonly used in the hospital"],
+      explanation_en: "An ambiguous prescription requires an immediate stop and direct verification with the doctor; assuming in such cases is a serious risk to patient safety.",
+      voice_en: "I trust the dose is correct as written."
+    },
+    {
+      station: "Pharmacy",
+      question: "عم سمير يسأل عن سبب اختلاف شكل ولون الدواء الذي استلمه هذه المرة عن المرة السابقة، رغم أنه نفس الاسم على العلبة.",
+      options: ["إخباره أن هذا أمر طبيعي ولا داعي للقلق", "التحقق من أنه نفس المادة الفعالة والجرعة (قد يكون بديلاً جنيساً) وشرح ذلك له بوضوح", "تجاهل السؤال لأن الاسم على العلبة مطابق"],
+      correct: 1,
+      explanation: "التحقق من تطابق المادة الفعالة والجرعة قبل طمأنة المريض يمنع أخطاء الاستبدال الدوائي غير المقصود، والشفافية تبني ثقته.",
+      voice: "هل هذا نفس الدواء فعلاً؟",
+      question_en: "Mr. Samir asks why the medication he received this time looks different in shape and color from last time, even though the box name is the same.",
+      options_en: ["Tell him this is normal and there's nothing to worry about", "Verify it's the same active ingredient and dose (it may be a generic substitute) and explain that clearly to him", "Ignore the question since the box name matches"],
+      explanation_en: "Confirming the active ingredient and dose match before reassuring the patient prevents unintended substitution errors, and transparency builds his trust.",
+      voice_en: "Is this really the same medication?"
+    },
+    {
+      station: "Pharmacy",
+      question: "لاحظت أن عم سمير يحمل أدوية من ثلاث صيدليات مختلفة، بعضها قد يتكرر بأسماء تجارية مختلفة لنفس المادة الفعالة.",
+      options: ["الاكتفاء بصرف الدواء المطلوب حالياً فقط", "مراجعة جميع أدويته الحالية بدقة لاستبعاد الازدواجية العلاجية أو التفاعلات", "نصحه بالتوقف عن التردد على صيدليات متعددة فقط"],
+      correct: 1,
+      explanation: "مطابقة الأدوية (Medication Reconciliation) الشاملة ضرورية لاكتشاف الازدواجية العلاجية الخفية عبر الأسماء التجارية المختلفة.",
+      voice: "أحياناً أنسى أي دواء أخذته من أي مكان.",
+      question_en: "You notice Mr. Samir carries medications from three different pharmacies, some of which may duplicate the same active ingredient under different brand names.",
+      options_en: ["Just dispense the currently requested medication", "Carefully review all his current medications to rule out therapeutic duplication or interactions", "Simply advise him to stop visiting multiple pharmacies"],
+      explanation_en: "Comprehensive medication reconciliation is essential to catch hidden therapeutic duplication across different brand names.",
+      voice_en: "Sometimes I forget which medication I got from where."
+    },
+    {
+      station: "Pharmacy",
+      question: "عم سمير يواجه صعوبة في فتح عبوات الدواء وتذكر مواعيد الجرعات المتعددة يومياً بسبب حالته الصحية.",
+      options: ["تسليم الأدوية كالمعتاد دون تعديل", "اقتراح عبوات سهلة الفتح ونظام تذكير أو منظم جرعات يناسب حالته", "إخباره بضرورة الاعتماد على أسرته فقط"],
+      correct: 1,
+      explanation: "تكييف طريقة صرف الدواء وفق قدرات المريض الجسدية والمعرفية يقلل بشكل كبير من أخطاء الالتزام الدوائي في المنزل.",
+      voice: "أخاف أن أنسى جرعة أو آخذها مرتين.",
+      question_en: "Mr. Samir struggles to open medication containers and remember multiple daily dose times due to his health condition.",
+      options_en: ["Dispense the medications as usual without any adjustment", "Suggest easy-open packaging and a reminder system or pill organizer suited to his condition", "Tell him he should just rely on his family"],
+      explanation_en: "Adapting the dispensing approach to the patient's physical and cognitive abilities significantly reduces medication adherence errors at home.",
+      voice_en: "I'm afraid I'll forget a dose or take it twice."
+    },
+    {
+      station: "Pharmacy",
+      question: "عم سمير على وشك الخروج من المستشفى، ولاحظت أن قائمة أدويته عند الخروج تختلف عن قائمة أدويته قبل دخوله دون توضيح للتغييرات.",
+      options: ["تسليم القائمة الجديدة دون شرح إضافي", "مراجعة التغييرات مع الفريق الطبي وشرحها بوضوح للمريض قبل الخروج", "الافتراض أن التغييرات مقصودة ومفهومة له"],
+      correct: 1,
+      explanation: "مطابقة الأدوية عند الخروج (Discharge Medication Reconciliation) ضرورية لمنع الالتباس أو استمرار أدوية يجب إيقافها.",
+      voice: "لماذا اختلفت أدويتي عما كنت آخذه قبل دخول المستشفى؟",
+      question_en: "Mr. Samir is about to be discharged, and you notice his discharge medication list differs from his pre-admission list without any explanation of the changes.",
+      options_en: ["Hand over the new list without further explanation", "Review the changes with the medical team and clearly explain them to the patient before discharge", "Assume the changes are intentional and understood by him"],
+      explanation_en: "Discharge medication reconciliation is essential to prevent confusion or continuation of medications that should have been stopped.",
+      voice_en: "Why are my medications different from what I was taking before I was admitted?"
+    },
+    {
+      station: "Pharmacy",
+      question: "لاحظت أن نظام صرف الأدوية الآلي أصدر تحذيراً بشأن تفاعل دوائي محتمل، لكن زميلك في الصيدلية يقترح تجاوز التحذير لأنه \"غالباً غير مهم\" وضغط العمل مرتفع.",
+      options: ["تجاوز التحذير كما اقترح زميلك لتوفير الوقت", "التحقق من التحذير سريرياً قبل اتخاذ أي قرار، بغض النظر على ضغط العمل", "تجاهل التحذير لأن النظام الآلي كثيراً ما يخطئ"],
+      correct: 1,
+      explanation: "تحذيرات التفاعلات الدوائية يجب تقييمها سريرياً دائماً؛ تجاوزها بدافع ضغط الوقت يعرض سلامة المريض لخطر حقيقي.",
+      voice: "أثق أن كل شيء يُراجع بعناية قبل أن يصل إلي.",
+      question_en: "The automated dispensing system flags a potential drug interaction, but your pharmacy colleague suggests overriding the alert because it's \"usually not significant\" and workload is high.",
+      options_en: ["Override the alert as your colleague suggests to save time", "Clinically evaluate the alert before making any decision, regardless of workload", "Ignore the alert since the automated system is often wrong"],
+      explanation_en: "Drug interaction alerts must always be clinically evaluated; overriding them due to time pressure puts patient safety at real risk.",
+      voice_en: "I trust everything is carefully reviewed before it reaches me."
     }
   ],
   Kitchen: [
@@ -917,15 +1229,33 @@ function loadQuestion() {
   document.getElementById("answers").innerHTML = "";
   document.getElementById("feedback").innerHTML = "";
 
+  // Shuffle the answer order every time a question is shown so the correct
+  // answer isn't predictably in the same position (previously it was almost
+  // always option #2).
+  const shuffledOptions = shuffleOptions(optionsValue, question.correct);
+
   const answersDiv = document.getElementById("answers");
-  optionsValue.forEach((option, index) => {
+  shuffledOptions.forEach(({ text, isCorrect }) => {
     const button = document.createElement("button");
-    button.innerHTML = option;
-    button.onclick = () => checkAnswer(index === question.correct, button, explanationValue);
+    button.innerHTML = text;
+    button.onclick = () => checkAnswer(isCorrect, button, explanationValue);
     answersDiv.appendChild(button);
   });
 
   updateBars();
+}
+
+/**
+ * Fisher-Yates shuffle of an options array, tracking which shuffled entry is
+ * the correct one (by original index) instead of relying on a fixed position.
+ */
+function shuffleOptions(options, correctIndex) {
+  const entries = options.map((text, index) => ({ text, isCorrect: index === correctIndex }));
+  for (let i = entries.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [entries[i], entries[j]] = [entries[j], entries[i]];
+  }
+  return entries;
 }
 
 /**
