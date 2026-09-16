@@ -6,6 +6,7 @@ let trustScore = 100;
 let answeredCorrectly = 0;
 let selectedRole = null;
 let isWHOChallenge = false;
+let missedTopics = [];
 
 let player = {
   role: ""
@@ -1375,6 +1376,9 @@ function checkAnswer(correct, buttonElement, explanation) {
     feedbackDiv.innerHTML = trans.incorrectAnswer + "<br><em>" + explanation + "</em>";
     safetyScore -= 10;
     trustScore -= 10;
+    const activeQuestions = isWHOChallenge ? questions["WHOChallenges"] : (questions[selectedRole] || []);
+    const missedQuestion = activeQuestions[currentQuestionIndex];
+    if (missedQuestion && missedQuestion.station) missedTopics.push(missedQuestion.station);
     if (avatarDiv) avatarDiv.classList.add("state-incorrect");
   }
 
@@ -1402,6 +1406,50 @@ function updateBars() {
   document.getElementById("trustValue").innerHTML = trustPercent + "%";
 }
 
+function getMostMissedTopic() {
+  if (!missedTopics.length) return null;
+  const counts = missedTopics.reduce((result, topic) => {
+    result[topic] = (result[topic] || 0) + 1;
+    return result;
+  }, {});
+  return Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+}
+
+function getPatientCenteredAdvice(role, score, lang) {
+  const advice = {
+    en: {
+      Doctor: ['Invite the patient into every clinical decision.', ['Explain options in plain language and confirm understanding.', 'Ask what matters most before agreeing on the care plan.', 'Use teach-back and document the patient’s preferences.']],
+      Nurse: ['Turn every bedside interaction into a partnership.', ['Listen without interruption and acknowledge concerns.', 'Keep the patient informed before every intervention.', 'Escalate changes early and advocate for stated preferences.']],
+      Pharmacist: ['Make every medication decision understandable and safe.', ['Explain purpose, dose, risks, and warning signs clearly.', 'Check allergies, interactions, and the patient’s actual routine.', 'Use teach-back and support shared medication decisions.']],
+      Kitchen: ['Connect safe nutrition with the patient’s needs and choices.', ['Confirm allergies, restrictions, culture, and preferences.', 'Explain how nutrition supports the agreed care goals.', 'Report poor intake or concerns promptly to the care team.']],
+      Housekeeping: ['Create a safe environment while respecting the person in it.', ['Introduce yourself and explain what you will clean and why.', 'Protect privacy, dignity, and personal belongings.', 'Report environmental hazards and respond respectfully to concerns.']],
+      Maintenance: ['Make reliable systems part of compassionate care.', ['Respond quickly to hazards that affect comfort or safety.', 'Explain disruptions and expected resolution when appropriate.', 'Coordinate repairs around patient needs and clinical priorities.']],
+      Administration: ['Design every process around the patient’s voice and journey.', ['Make access, complaints, and information easy to navigate.', 'Use feedback to remove barriers and improve continuity.', 'Include patients and families in service-improvement decisions.']]
+    },
+    ar: {
+      Doctor: ['أشرك المريض في كل قرار سريري.', ['اشرح الخيارات بلغة بسيطة وتأكد من الفهم.', 'اسأل المريض عمّا يهمه أكثر قبل الاتفاق على خطة الرعاية.', 'استخدم أسلوب إعادة الشرح ووثّق تفضيلات المريض.']],
+      Nurse: ['حوّل كل تواصل بجانب المريض إلى شراكة حقيقية.', ['استمع دون مقاطعة واعترف بمخاوف المريض.', 'أبلغ المريض قبل كل تدخل أو إجراء.', 'صعّد التغيّرات مبكراً ودافع عن تفضيلات المريض.']],
+      Pharmacist: ['اجعل كل قرار دوائي مفهوماً وآمناً.', ['اشرح الهدف والجرعة والمخاطر وعلامات التحذير بوضوح.', 'تحقق من الحساسية والتداخلات وروتين المريض الفعلي.', 'استخدم إعادة الشرح وادعم القرار الدوائي المشترك.']],
+      Kitchen: ['اربط التغذية الآمنة باحتياجات المريض واختياراته.', ['تأكد من الحساسية والقيود والثقافة والتفضيلات.', 'اشرح كيف تدعم التغذية أهداف الرعاية المتفق عليها.', 'أبلغ فريق الرعاية سريعاً عن ضعف تناول الطعام أو أي مخاوف.']],
+      Housekeeping: ['وفّر بيئة آمنة مع احترام الشخص الموجود فيها.', ['عرّف بنفسك واشرح ما ستنظفه ولماذا.', 'احمِ خصوصية المريض وكرامته وممتلكاته.', 'أبلغ عن المخاطر البيئية واستجب للمخاوف باحترام.']],
+      Maintenance: ['اجعل موثوقية الأنظمة جزءاً من الرعاية الرحيمة.', ['استجب سريعاً للمخاطر التي تؤثر في الراحة أو السلامة.', 'اشرح الأعطال والوقت المتوقع للحل عندما يكون ذلك مناسباً.', 'نسّق أعمال الإصلاح وفق احتياجات المريض والأولويات السريرية.']],
+      Administration: ['صمّم كل إجراء حول صوت المريض ورحلته.', ['اجعل الوصول والشكاوى والمعلومات سهلة وواضحة.', 'استخدم الملاحظات لإزالة العوائق وتحسين استمرارية الرعاية.', 'أشرك المرضى وعائلاتهم في قرارات تحسين الخدمات.']]
+    }
+  };
+  const languageAdvice = advice[lang] || advice.en;
+  const roleAdvice = languageAdvice[role] || languageAdvice.Doctor;
+  const level = score >= 80
+    ? (lang === 'ar' ? 'ممارس متميز للرعاية المتمحورة حول المريض' : 'Patient-Centered Care Champion')
+    : score >= 60
+      ? (lang === 'ar' ? 'أساس قوي مع فرصة للتطور' : 'Strong Foundation, Ready to Grow')
+      : (lang === 'ar' ? 'لنحوّل المعرفة إلى ممارسة يومية' : 'Turn Learning into Daily Practice');
+  const topic = getMostMissedTopic();
+  const focus = topic
+    ? (lang === 'ar' ? 'ركّز بشكل إضافي على المواقف المرتبطة بـ: ' + topic + '.' : 'Give extra attention to scenarios involving: ' + topic + '.')
+    : (lang === 'ar' ? 'أظهرت إجاباتك اتساقاً جيداً عبر جميع مجالات السلامة.' : 'Your answers showed strong consistency across the safety topics.');
+  return { level, summary: roleAdvice[0] + ' ' + focus, actions: roleAdvice[1] };
+}
+
 /**
  * End the game and show results
  */
@@ -1414,8 +1462,26 @@ function endGame() {
   const whoQuestions = questions["WHOChallenges"];
   const totalQuestions = roleQuestions.length + whoQuestions.length;
   const finalScore = Math.round((answeredCorrectly / totalQuestions) * 100);
-  document.getElementById("finalScore").innerHTML = finalScore + "%";
-  document.getElementById("playerInfo").innerHTML = `<strong>${player.role}</strong>`;
+  const advice = getPatientCenteredAdvice(selectedRole, finalScore, language);
+  const roleLabels = language === "ar"
+    ? {Doctor:"طبيب",Nurse:"تمريض",Pharmacist:"صيدلي",Kitchen:"التغذية",Housekeeping:"النظافة",Maintenance:"الصيانة",Administration:"الإدارة"}
+    : {Doctor:"Doctor",Nurse:"Nurse",Pharmacist:"Pharmacist",Kitchen:"Nutrition",Housekeeping:"Housekeeping",Maintenance:"Maintenance",Administration:"Administration"};
+  const scoreElement = document.getElementById("finalScore");
+  scoreElement.innerHTML = finalScore + "%";
+  scoreElement.parentElement.style.setProperty("--score", finalScore * 3.6 + "deg");
+  document.getElementById("playerInfo").innerHTML = `<span>${language === "ar" ? "الدور" : "ROLE"}</span><strong>${roleLabels[selectedRole] || selectedRole}</strong>`;
+  document.getElementById("resultLevel").textContent = advice.level;
+  document.getElementById("resultCorrect").textContent = answeredCorrectly + " / " + totalQuestions;
+  document.getElementById("resultSafety").textContent = Math.max(0, safetyScore) + "%";
+  document.getElementById("adviceTitle").textContent = language === "ar" ? "نصيحتك للرعاية المتمحورة حول المريض" : "Your Patient-Centered Care Advice";
+  document.getElementById("adviceSummary").textContent = advice.summary;
+  document.getElementById("adviceActions").innerHTML = advice.actions.map(action => "<li>" + action + "</li>").join("");
+  document.getElementById("gameOverTitle").textContent = language === "ar" ? "أحسنت، لقد أكملت الرحلة!" : "Well done—you completed the journey!";
+  document.getElementById("finalMessage").textContent = language === "ar" ? "كل قرار آمن يقربنا من رعاية أفضل لكل مريض." : "Every safer decision brings us closer to better care for every patient.";
+  document.getElementById("newGameBtn").innerHTML = language === "ar" ? "ابدأ رحلة جديدة <b>←</b>" : "Start a new journey <b>→</b>";
+  document.getElementById("resultEyebrow").textContent = language === "ar" ? "نتيجة رحلة سلامة المرضى" : "PATIENT SAFETY JOURNEY RESULT";
+  document.getElementById("correctLabel").textContent = language === "ar" ? "إجابات صحيحة" : "Correct answers";
+  document.getElementById("safetyResultLabel").textContent = language === "ar" ? "درجة السلامة" : "Safety score";
 
   pushLiveScore("finished", { finalScore });
 }
