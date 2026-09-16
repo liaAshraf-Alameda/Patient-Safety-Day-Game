@@ -754,6 +754,9 @@ function startGame() {
  * Load a specific question based on player role
  */
 function loadQuestion() {
+  const avatarDiv = document.getElementById("avatar");
+  if (avatarDiv) avatarDiv.classList.remove("state-correct", "state-incorrect");
+
   const roleQuestions = isWHOChallenge ? questions["WHOChallenges"] : (questions[selectedRole] || questions["WHOChallenges"]);
   
   if (currentQuestionIndex >= roleQuestions.length) {
@@ -819,6 +822,13 @@ function checkAnswer(correct, buttonElement, explanation) {
   const feedbackDiv = document.getElementById("feedback");
   feedbackDiv.classList.remove("correct", "incorrect");
 
+  const avatarDiv = document.getElementById("avatar");
+  if (avatarDiv) {
+    avatarDiv.classList.remove("state-correct", "state-incorrect");
+    // Force reflow so the reaction animation replays even for consecutive same-result answers
+    void avatarDiv.offsetWidth;
+  }
+
   const trans = translations[language];
 
   if (correct) {
@@ -826,17 +836,20 @@ function checkAnswer(correct, buttonElement, explanation) {
     feedbackDiv.classList.add("correct");
     feedbackDiv.innerHTML = trans.correctAnswer + "<br><em>" + explanation + "</em>";
     answeredCorrectly++;
+    if (avatarDiv) avatarDiv.classList.add("state-correct");
   } else {
     buttonElement.classList.add("incorrect");
     feedbackDiv.classList.add("incorrect");
     feedbackDiv.innerHTML = trans.incorrectAnswer + "<br><em>" + explanation + "</em>";
     safetyScore -= 10;
     trustScore -= 10;
+    if (avatarDiv) avatarDiv.classList.add("state-incorrect");
   }
 
   updateBars();
 
   setTimeout(() => {
+    if (avatarDiv) avatarDiv.classList.remove("state-correct", "state-incorrect");
     currentQuestionIndex++;
     loadQuestion();
   }, 3000);

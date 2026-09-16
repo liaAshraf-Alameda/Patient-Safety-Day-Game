@@ -204,10 +204,187 @@ option {
 }
 
 #avatar {
-  font-size: 50px;
-  animation: float 2s infinite;
   display: inline-block;
-  text-shadow: 0 0 24px rgba(0, 217, 255, 0.45);
+}
+
+.avatar-svg {
+  width: 160px;
+  height: auto;
+  overflow: visible;
+}
+
+.avatar-shadow {
+  fill: rgba(3, 7, 20, 0.55);
+  filter: blur(2px);
+}
+
+.avatar-figure {
+  transform-box: view-box;
+  transform-origin: 100px 300px;
+  animation: float 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 18px rgba(0, 217, 255, 0.45));
+  transition: filter 0.3s ease;
+}
+
+.avatar-head,
+.avatar-ear {
+  fill: #ffe0c2;
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 1.5;
+}
+
+.avatar-hair {
+  fill: none;
+  stroke: #c7d3ef;
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+
+.avatar-eye {
+  fill: #0c1230;
+}
+
+.avatar-eye-line,
+.avatar-mouth {
+  fill: none;
+  stroke: #0c1230;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.avatar-tear {
+  fill: #00d9ff;
+  opacity: 0.85;
+}
+
+.face-happy,
+.face-sad {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.face-normal {
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+
+.avatar-gown {
+  stroke: var(--accent-highlight);
+  stroke-width: 2;
+}
+
+.avatar-leg,
+.avatar-foot {
+  fill: #232c58;
+  stroke: rgba(143, 232, 255, 0.35);
+  stroke-width: 1.5;
+}
+
+.avatar-arm {
+  stroke: #232c58;
+  stroke-width: 16;
+  stroke-linecap: round;
+  transform-box: view-box;
+  transition: transform 0.35s ease;
+}
+
+.arm-left {
+  transform-origin: 68px 120px;
+}
+
+.arm-right {
+  transform-origin: 132px 120px;
+}
+
+.head-group {
+  transform-box: view-box;
+  transform-origin: 100px 60px;
+  transition: transform 0.3s ease;
+}
+
+/* Correct answer reaction: cheerful jump with raised arms */
+.avatar-wrap.state-correct .avatar-figure {
+  animation: avatarBounce 0.7s ease;
+  filter: drop-shadow(0 0 26px rgba(93, 255, 133, 0.65));
+}
+
+.avatar-wrap.state-correct .face-normal {
+  opacity: 0;
+}
+
+.avatar-wrap.state-correct .face-happy {
+  opacity: 1;
+}
+
+.avatar-wrap.state-correct .arm-left {
+  transform: rotate(-165deg);
+}
+
+.avatar-wrap.state-correct .arm-right {
+  transform: rotate(165deg);
+}
+
+/* Incorrect answer reaction: slumped shoulders and a sad shake */
+.avatar-wrap.state-incorrect .avatar-figure {
+  animation: avatarShake 0.6s ease;
+  filter: drop-shadow(0 0 26px rgba(255, 107, 122, 0.65));
+}
+
+.avatar-wrap.state-incorrect .face-normal {
+  opacity: 0;
+}
+
+.avatar-wrap.state-incorrect .face-sad {
+  opacity: 1;
+}
+
+.avatar-wrap.state-incorrect .arm-left {
+  transform: rotate(18deg);
+}
+
+.avatar-wrap.state-incorrect .arm-right {
+  transform: rotate(-18deg);
+}
+
+.avatar-wrap.state-incorrect .head-group {
+  transform: rotate(9deg);
+}
+
+@keyframes avatarBounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(-30px) scale(1.05);
+  }
+  55% {
+    transform: translateY(4px) scale(0.98);
+  }
+  75% {
+    transform: translateY(-10px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes avatarShake {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  20% {
+    transform: translateX(-10px) rotate(-4deg);
+  }
+  40% {
+    transform: translateX(9px) rotate(4deg);
+  }
+  60% {
+    transform: translateX(-7px) rotate(-3deg);
+  }
+  80% {
+    transform: translateX(6px) rotate(2deg);
+  }
 }
 
 @keyframes float {
@@ -230,9 +407,11 @@ option {
 }
 
 .patient-big {
-  font-size: 120px;
   text-align: center;
-  text-shadow: 0 0 28px rgba(255, 79, 216, 0.38);
+}
+
+.patient-big .avatar-svg {
+  width: 220px;
 }
 
 .hero-left {
