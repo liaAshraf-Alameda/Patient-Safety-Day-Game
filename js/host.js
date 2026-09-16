@@ -64,15 +64,12 @@ function getPlayerScore(player) {
 function aggregateByRole(players) {
   const prefix = currentSessionId + "__";
   const roles = {};
-  ALL_ROLES.forEach(role => {
-    roles[role] = { role, participants: 0, scoreTotal: 0, safetyTotal: 0, trustTotal: 0, finished: 0 };
-  });
 
   Object.keys(players || {}).forEach(id => {
     if (!id.startsWith(prefix)) return;
     const player = players[id] || {};
     const role = player.role || "Unknown";
-    if (!roles[role]) return;
+    if (!roles[role]) roles[role] = { role, participants: 0, scoreTotal: 0, safetyTotal: 0, trustTotal: 0, finished: 0 };
     roles[role].participants += 1;
     roles[role].scoreTotal += getPlayerScore(player);
     roles[role].safetyTotal += Math.max(0, Number(player.safetyScore) || 0);
@@ -83,11 +80,10 @@ function aggregateByRole(players) {
   return Object.values(roles).map(group => ({
     role: group.role,
     participants: group.participants,
-    collectiveScore: group.scoreTotal,
     averageScore: group.participants ? group.scoreTotal / group.participants : 0,
     patientCenteredScore: group.participants ? (group.safetyTotal + group.trustTotal) / (group.participants * 2) : 0,
     finished: group.finished
-  })).sort((a, b) => b.collectiveScore - a.collectiveScore || b.averageScore - a.averageScore || b.participants - a.participants || ALL_ROLES.indexOf(a.role) - ALL_ROLES.indexOf(b.role));
+  })).sort((a, b) => b.averageScore - a.averageScore || b.participants - a.participants);
 }
 
 function updateRoleAwards(groups) {
@@ -100,21 +96,16 @@ function updateRoleAwards(groups) {
   if (!scoreName || !groups.length) return;
 
   groups.forEach(group => {
-    if (typeof roleBaselines[group.role] !== "number") roleBaselines[group.role] = group.collectiveScore;
-    group.improvement = group.collectiveScore - roleBaselines[group.role];
+    if (typeof roleBaselines[group.role] !== "number") roleBaselines[group.role] = group.averageScore;
+    group.improvement = group.averageScore - roleBaselines[group.role];
   });
 
-  const activeGroups = groups.filter(group => group.participants > 0);
-  if (!activeGroups.length) {
-    resetRoleAwards();
-    return;
-  }
-  const highest = (activeGroups.length ? activeGroups : groups).slice().sort((a, b) => b.collectiveScore - a.collectiveScore || b.averageScore - a.averageScore)[0];
-  const improved = (activeGroups.length ? activeGroups : groups).slice().sort((a, b) => b.improvement - a.improvement || b.collectiveScore - a.collectiveScore)[0];
-  const care = (activeGroups.length ? activeGroups : groups).slice().sort((a, b) => b.patientCenteredScore - a.patientCenteredScore || b.collectiveScore - a.collectiveScore)[0];
+  const highest = groups.slice().sort((a, b) => b.averageScore - a.averageScore || b.participants - a.participants)[0];
+  const improved = groups.slice().sort((a, b) => b.improvement - a.improvement || b.averageScore - a.averageScore)[0];
+  const care = groups.slice().sort((a, b) => b.patientCenteredScore - a.patientCenteredScore || b.averageScore - a.averageScore)[0];
 
   scoreName.textContent = highest.role;
-  scoreValue.textContent = Math.round(highest.collectiveScore * 10) / 10 + " collective points";
+  scoreValue.textContent = Math.round(highest.averageScore * 10) / 10 + "% team average";
   improvedName.textContent = improved.role;
   improvedValue.textContent = "+" + Math.max(0, Math.round(improved.improvement * 10) / 10) + " points";
   careName.textContent = care.role;
@@ -146,12 +137,9 @@ function renderLeaderboard(players) {
 
   updateRoleAwards(groups);
 
-  const maximumCollectiveScore = Math.max(1, ...groups.map(group => group.collectiveScore));
   container.innerHTML = groups.map((group, index) => {
     const rank = index + 1;
     const average = Math.round(group.averageScore * 10) / 10;
-    const collective = Math.round(group.collectiveScore * 10) / 10;
-    const collectiveWidth = Math.max(0, Math.min(100, group.collectiveScore / maximumCollectiveScore * 100));
     return `
       <div class="leaderboard-row role-row rank-${rank}">
         <div class="leaderboard-rank">#${rank}</div>
@@ -161,10 +149,10 @@ function renderLeaderboard(players) {
         </div>
         <div class="role-participants"><strong>${group.participants}</strong><span>Participants</span></div>
         <div class="leaderboard-bar-wrap">
-          <div class="leaderboard-bar-label"><span>Collective role score</span><span>${collective} points</span></div>
-          <div class="leaderboard-bar"><div class="fill" style="width:${collectiveWidth}%;background:linear-gradient(90deg,var(--accent-highlight),var(--accent-success));"></div></div>
+          <div class="leaderboard-bar-label"><span>Average score</span><span>${average}%</span></div>
+          <div class="leaderboard-bar"><div class="fill" style="width:${Math.max(0, Math.min(100, average))}%;background:linear-gradient(90deg,var(--accent-highlight),var(--accent-success));"></div></div>
         </div>
-        <div class="role-average">${collective}<small> pts</small></div>
+        <div class="role-average">${average}%</div>
       </div>`;
   }).join("");
 }
