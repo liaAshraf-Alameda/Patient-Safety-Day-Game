@@ -445,8 +445,6 @@ const translations = {
     safetyLabel: "درجة السلامة",
     trustLabel: "ثقة المريض",
     journeyTitle: "🏥 رحلة عم سمير الآمنة",
-    currentStationLabel: "المحطة الحالية",
-    questionPlaceholder: "سيتم تحميل السؤال هنا",
     gameOverTitle: "تم إكمال اللعبة!",
     finalMessage: "شكراً لك على مساعدتك لعم سمير على إكمال رحلة آمنة!",
     playAgainBtn: "لعبة جديدة",
@@ -471,8 +469,6 @@ const translations = {
     safetyLabel: "Patient Safety Score",
     trustLabel: "Patient Trust",
     journeyTitle: "🏥 Mr. Samir's Safe Journey",
-    currentStationLabel: "Current Station",
-    questionPlaceholder: "The question will appear here",
     gameOverTitle: "Game Complete!",
     finalMessage: "Thank you for helping Mr. Samir complete a safe hospital journey!",
     playAgainBtn: "Play Again",
@@ -541,9 +537,6 @@ function setLanguage(lang) {
     document.getElementById("journeyTitle").innerHTML = trans.journeyTitle;
     if (!document.getElementById("gameScreen").classList.contains("hidden")) {
       loadQuestion();
-    } else if (document.getElementById("gameOverScreen").classList.contains("hidden")) {
-      document.getElementById("currentStation").innerHTML = trans.currentStationLabel;
-      document.getElementById("questionText").innerHTML = trans.questionPlaceholder;
     }
   }
 
