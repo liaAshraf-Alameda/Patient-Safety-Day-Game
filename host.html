@@ -4,42 +4,67 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Safe Patient Journey — Live Scoreboard</title>
-  <link rel="stylesheet" href="css/style.css?v=20260916b">
-  <link rel="stylesheet" href="css/host.css?v=20260916b">
-  <style>
-    .leaderboard-row.role-row{grid-template-columns:60px 1.3fr 150px 1.4fr 120px}
-    .role-participants{display:flex;flex-direction:column;text-align:center;color:var(--text-secondary)}
-    .role-participants strong{font-size:28px;color:var(--heading)}
-    .role-participants span{font-size:12px}
-    .role-average{text-align:center;font-size:26px;font-weight:800;color:var(--accent-success)}
-    .join-panel-text button{margin-top:10px}
-    @media(max-width:900px){.leaderboard-row.role-row{grid-template-columns:1fr}.role-average{font-size:22px}}
-  </style>
+  <link rel="stylesheet" href="css/host.css?v=20260916c">
 </head>
 <body class="host-body">
-  <div class="host-header">
-    <h1>🏥 Safe Patient Journey — Live Scoreboard</h1>
-    <span class="host-live-badge"><span class="host-live-dot"></span>LIVE</span>
-  </div>
+  <div class="host-orb host-orb-one"></div>
+  <div class="host-orb host-orb-two"></div>
+  <div class="host-shell">
+    <header class="host-header">
+      <div class="host-brand">
+        <img src="assets/ui/wpsd.webp.png" alt="Patient Safety Day">
+        <div><strong>Patient Safety Day</strong><span>Safer Care • Brighter Tomorrow</span></div>
+      </div>
+      <div class="host-title">
+        <span>LIVE TEAM EXPERIENCE</span>
+        <h1>Safe Patient Journey</h1>
+      </div>
+      <div class="host-controls">
+        <button type="button" id="musicToggle" class="music-toggle" onclick="toggleHostMusic()" aria-pressed="false"><span>♪</span><b>Music</b></button>
+        <span class="host-live-badge"><span class="host-live-dot"></span>LIVE</span>
+      </div>
+    </header>
 
-  <div class="join-panel" id="joinPanel">
-    <canvas id="joinQrCode"></canvas>
-    <div class="join-panel-text">
-      <h2>📱 Scan to Join This Session</h2>
-      <p>Session: <strong id="sessionIdText">—</strong></p>
-      <p id="joinUrlText">Loading link…</p>
-      <button type="button" onclick="startNewSession()">🔄 Start New Session</button>
-    </div>
-  </div>
+    <main>
+      <section class="join-panel" id="joinPanel">
+        <div class="join-copy">
+          <span class="join-kicker">JOIN THE EXPERIENCE</span>
+          <h2>Scan. Choose your role.<br>Make care safer.</h2>
+          <p>Invite every participant to scan the QR code and join this live patient-safety session.</p>
+          <div class="session-code"><span>SESSION CODE</span><strong id="sessionIdText">—</strong></div>
+          <button type="button" class="new-session-button" onclick="startNewSession()">Start New Session <b>↻</b></button>
+        </div>
+        <div class="qr-wrap">
+          <div class="qr-corner"></div>
+          <canvas id="joinQrCode"></canvas>
+          <span>SCAN TO JOIN</span>
+        </div>
+        <div class="join-art" aria-hidden="true">
+          <div class="join-art-circle"></div>
+          <img src="assets/characters/Doctor.webp.png" alt="">
+          <img class="join-patient" src="assets/characters/Attentive patient.webp.png" alt="">
+        </div>
+        <p id="joinUrlText" class="join-url">Loading link…</p>
+      </section>
 
-  <div class="leaderboard" id="leaderboard">
-    <div class="leaderboard-empty">Waiting for players to join…</div>
+      <section class="scoreboard-section">
+        <div class="scoreboard-heading">
+          <div><span>REAL-TIME RESULTS</span><h2>Team Scoreboard</h2></div>
+          <p>Scores update automatically as teams progress through the patient-safety journey.</p>
+        </div>
+        <div class="leaderboard" id="leaderboard">
+          <div class="leaderboard-empty"><span class="waiting-pulse"></span><strong>Waiting for players to join…</strong><small>Share the QR code above to begin.</small></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="host-footer"><span>Learn</span><i></i><span>Decide</span><i></i><span>Protect</span><b>Different roles. One shared goal. Safer patients.</b></footer>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="js/firebase-config.js?v=20260916b"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1/build/qrcode.min.js"></script>
-  <script src="js/host.js?v=20260916b"></script>
+  <script src="js/host.js?v=20260916c"></script>
 </body>
 </html>
