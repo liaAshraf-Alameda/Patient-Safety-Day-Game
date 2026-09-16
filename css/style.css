@@ -203,6 +203,135 @@ option {
   box-shadow: 0 0 20px rgba(93, 255, 133, 0.24);
 }
 
+.station-icon {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+.station-label {
+  font-size: 13px;
+}
+
+/* Themed backdrop behind the game screen, changes with the current station */
+#gameScreen {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  transition: background 0.6s ease;
+}
+
+#gameScreen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.9;
+  background-size: cover;
+  background-position: center;
+  transition: background 0.6s ease;
+  pointer-events: none;
+}
+
+#gameScreen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  font-size: 220px;
+  line-height: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 10px 20px;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+#gameScreen > * {
+  position: relative;
+  z-index: 1;
+}
+
+#gameScreen[data-place="clinic"]::before {
+  background:
+    radial-gradient(circle at 15% 15%, rgba(0, 217, 255, 0.32), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(93, 255, 231, 0.22), transparent 50%),
+    linear-gradient(160deg, #05202f, #0a3244 60%, #041722);
+}
+#gameScreen[data-place="clinic"]::after {
+  content: "🩺";
+}
+
+#gameScreen[data-place="ward"]::before {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(93, 255, 133, 0.28), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.2), transparent 50%),
+    linear-gradient(160deg, #06231d, #0c3a2c 60%, #04211a);
+}
+#gameScreen[data-place="ward"]::after {
+  content: "🛏️";
+}
+
+#gameScreen[data-place="pharmacy"]::before {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(176, 38, 255, 0.32), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(255, 79, 216, 0.22), transparent 50%),
+    linear-gradient(160deg, #1c0a33, #2c1350 60%, #150826);
+}
+#gameScreen[data-place="pharmacy"]::after {
+  content: "💊";
+}
+
+#gameScreen[data-place="kitchen"]::before {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 170, 60, 0.3), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(255, 107, 122, 0.2), transparent 50%),
+    linear-gradient(160deg, #331a06, #4a280c 60%, #24140a);
+}
+#gameScreen[data-place="kitchen"]::after {
+  content: "🍲";
+}
+
+#gameScreen[data-place="housekeeping"]::before {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.28), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(93, 255, 231, 0.22), transparent 50%),
+    linear-gradient(160deg, #062a2a, #0b3f3f 60%, #041e1e);
+}
+#gameScreen[data-place="housekeeping"]::after {
+  content: "🧹";
+}
+
+#gameScreen[data-place="maintenance"]::before {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 196, 60, 0.28), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(143, 232, 255, 0.16), transparent 50%),
+    linear-gradient(160deg, #2a2410, #3f3818 60%, #1c1808);
+}
+#gameScreen[data-place="maintenance"]::after {
+  content: "🔧";
+}
+
+#gameScreen[data-place="admin"]::before {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.26), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(176, 38, 255, 0.2), transparent 50%),
+    linear-gradient(160deg, #0a1830, #10254a 60%, #060f20);
+}
+#gameScreen[data-place="admin"]::after {
+  content: "📋";
+}
+
+#gameScreen[data-place="who"]::before {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 216, 0, 0.28), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(255, 79, 216, 0.22), transparent 50%),
+    linear-gradient(160deg, #2a2005, #40330a 60%, #1c1604);
+}
+#gameScreen[data-place="who"]::after {
+  content: "🌍";
+}
+
 #avatar {
   display: inline-block;
   flex-shrink: 0;

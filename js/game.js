@@ -751,6 +751,97 @@ function startGame() {
 }
 
 /**
+ * Maps each question "station" name to a visual place theme, so the game
+ * screen background and the journey map icon can reflect where in the
+ * hospital the patient currently is.
+ */
+const placeThemes = {
+  Clinic: "clinic",
+  Consultation: "clinic",
+  Ward: "ward",
+  Pharmacy: "pharmacy",
+  Nutrition: "kitchen",
+  Housekeeping: "housekeeping",
+  Maintenance: "maintenance",
+  Registration: "admin",
+  "Patient Rights": "admin",
+  "Complaint Management": "admin",
+  "Shared Decision": "admin",
+  Communication: "admin",
+  "Test Results": "admin",
+  "Transfer of Care": "admin",
+  "Care Plan": "admin",
+  "Follow-up": "admin",
+  Coordination: "admin",
+  "WHO Gold Challenge": "who"
+};
+
+const placeMeta = {
+  clinic: { icon: "🩺" },
+  ward: { icon: "🛏️" },
+  pharmacy: { icon: "💊" },
+  kitchen: { icon: "🍲" },
+  housekeeping: { icon: "🧹" },
+  maintenance: { icon: "🔧" },
+  admin: { icon: "📋" },
+  who: { icon: "🌍" }
+};
+
+/**
+ * Switch the game screen's themed background to match the current station.
+ */
+function applyPlaceTheme(station) {
+  const gameScreen = document.getElementById("gameScreen");
+  if (!gameScreen) return;
+  const theme = placeThemes[station] || "clinic";
+  gameScreen.setAttribute("data-place", theme);
+}
+
+/**
+ * Render the patient's journey map: one box per unique station visited by
+ * the current role, plus the closing WHO Gold Challenge, marking each as
+ * completed, active, or upcoming.
+ */
+function renderStationMap(roleQuestions, question) {
+  const mapDiv = document.getElementById("stationMap");
+  if (!mapDiv) return;
+
+  const stations = [];
+  roleQuestions.forEach(q => {
+    if (!stations.includes(q.station)) stations.push(q.station);
+  });
+  if (!stations.includes("WHO Gold Challenge")) stations.push("WHO Gold Challenge");
+
+  mapDiv.innerHTML = "";
+  stations.forEach(stationName => {
+    const theme = placeThemes[stationName] || "clinic";
+    const box = document.createElement("div");
+    box.className = "station";
+
+    const isWhoStation = stationName === "WHO Gold Challenge";
+    const roleFinished = currentQuestionIndex >= roleQuestions.length || isWHOChallenge;
+
+    if (isWhoStation) {
+      if (isWHOChallenge) {
+        box.classList.add("active");
+      } else if (roleFinished) {
+        box.classList.add("active");
+      }
+    } else if (isWHOChallenge) {
+      box.classList.add("completed");
+    } else if (question && question.station === stationName) {
+      box.classList.add("active");
+    } else {
+      const lastIndexForStation = roleQuestions.reduce((acc, q, idx) => (q.station === stationName ? idx : acc), -1);
+      if (lastIndexForStation < currentQuestionIndex) box.classList.add("completed");
+    }
+
+    box.innerHTML = `<div class="station-icon">${placeMeta[theme].icon}</div><div class="station-label">${stationName}</div>`;
+    mapDiv.appendChild(box);
+  });
+}
+
+/**
  * Load a specific question based on player role
  */
 function loadQuestion() {
@@ -758,10 +849,13 @@ function loadQuestion() {
   if (avatarDiv) avatarDiv.classList.remove("state-correct", "state-incorrect");
 
   const roleQuestions = isWHOChallenge ? questions["WHOChallenges"] : (questions[selectedRole] || questions["WHOChallenges"]);
+  const journeyQuestions = questions[selectedRole] || questions["WHOChallenges"];
   
   if (currentQuestionIndex >= roleQuestions.length) {
     // If we just finished role questions, move to WHO Challenge
     if (!isWHOChallenge) {
+      applyPlaceTheme("WHO Gold Challenge");
+      renderStationMap(journeyQuestions, null);
       showWHOChallengeIntro();
     } else {
       // If we finished WHO Challenge, end the game
@@ -775,6 +869,9 @@ function loadQuestion() {
   const questionTextValue = isEnglish && question.question_en ? question.question_en : question.question;
   const optionsValue = isEnglish && question.options_en ? question.options_en : question.options;
   const explanationValue = isEnglish && question.explanation_en ? question.explanation_en : question.explanation;
+
+  applyPlaceTheme(question.station);
+  renderStationMap(journeyQuestions, isWHOChallenge ? null : question);
 
   document.getElementById("currentStation").innerHTML = language === "ar" ? `المحطة: ${question.station}` : `Station: ${question.station}`;
   document.getElementById("questionText").innerHTML = questionTextValue;
