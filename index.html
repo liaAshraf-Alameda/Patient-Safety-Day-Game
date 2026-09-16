@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Safe Patient Journey</title>
+  <title>Safe Patient Journey Game</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -37,9 +37,9 @@
     <div class="card">
       <h2 id="regTitle">بيانات اللاعب</h2>
       <label id="nameLabel">الاسم</label>
-      <input id="playerName" placeholder="">
+      <input id="playerName" placeholder="اكتب اسمك">
       <label id="deptLabel">القسم</label>
-      <input id="department" placeholder="">
+      <input id="department" placeholder="اكتب القسم">
       <label id="roleLabel">الدور الوظيفي</label>
       <select id="role">
         <option value="Doctor">👨‍⚕️ Doctor</option>
@@ -104,8 +104,8 @@
       <div class="score">
         <span id="finalScore">100</span>
       </div>
-      <p id="playerInfo"></p>
-      <button onclick="saveScoreAndReload()">لعبة جديدة</button>
+      <p id="playerInfo"><strong id="playerInfoName"></strong><span id="playerInfoDetails"></span></p>
+      <button onclick="saveScoreAndReload()" id="playAgainBtn">لعبة جديدة</button>
     </div>
   </div>
 

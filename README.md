@@ -1,6 +1,6 @@
 # Safe Patient Journey Game
 
-🏥 **World Patient Safety Day 2026** - Interactive Educational Game
+🏥 **World Patient Safety Day 2026** - Interactive Safe Patient Journey Game
 
 ## Overview
 An interactive web-based game designed to educate healthcare professionals about patient safety protocols across different hospital departments. Players guide a patient through various hospital stations, making safety-conscious decisions at each step.
