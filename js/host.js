@@ -11,6 +11,7 @@ let hostAudioContext = null;
 let hostMusicGain = null;
 let hostMusicTimer = null;
 let hostMusicEnabled = false;
+let roleBaselines = {};
 
 function playAmbientPhrase() {
   if (!hostAudioContext || !hostMusicEnabled) return;
@@ -93,9 +94,11 @@ function aggregateByRole(players) {
     if (!id.startsWith(prefix)) return;
     const player = players[id] || {};
     const role = player.role || "Unknown";
-    if (!roles[role]) roles[role] = { role, participants: 0, scoreTotal: 0, finished: 0 };
+    if (!roles[role]) roles[role] = { role, participants: 0, scoreTotal: 0, safetyTotal: 0, trustTotal: 0, finished: 0 };
     roles[role].participants += 1;
     roles[role].scoreTotal += getPlayerScore(player);
+    roles[role].safetyTotal += Math.max(0, Number(player.safetyScore) || 0);
+    roles[role].trustTotal += Math.max(0, Number(player.trustScore) || 0);
     if (player.status === "finished") roles[role].finished += 1;
   });
 
@@ -103,8 +106,48 @@ function aggregateByRole(players) {
     role: group.role,
     participants: group.participants,
     averageScore: group.participants ? group.scoreTotal / group.participants : 0,
+    patientCenteredScore: group.participants ? (group.safetyTotal + group.trustTotal) / (group.participants * 2) : 0,
     finished: group.finished
   })).sort((a, b) => b.averageScore - a.averageScore || b.participants - a.participants);
+}
+
+function updateRoleAwards(groups) {
+  const scoreName = document.getElementById("highestScoreRole");
+  const scoreValue = document.getElementById("highestScoreValue");
+  const improvedName = document.getElementById("mostImprovedRole");
+  const improvedValue = document.getElementById("mostImprovedValue");
+  const careName = document.getElementById("bestCareRole");
+  const careValue = document.getElementById("bestCareValue");
+  if (!scoreName || !groups.length) return;
+
+  groups.forEach(group => {
+    if (typeof roleBaselines[group.role] !== "number") roleBaselines[group.role] = group.averageScore;
+    group.improvement = group.averageScore - roleBaselines[group.role];
+  });
+
+  const highest = groups.slice().sort((a, b) => b.averageScore - a.averageScore || b.participants - a.participants)[0];
+  const improved = groups.slice().sort((a, b) => b.improvement - a.improvement || b.averageScore - a.averageScore)[0];
+  const care = groups.slice().sort((a, b) => b.patientCenteredScore - a.patientCenteredScore || b.averageScore - a.averageScore)[0];
+
+  scoreName.textContent = highest.role;
+  scoreValue.textContent = Math.round(highest.averageScore * 10) / 10 + "% team average";
+  improvedName.textContent = improved.role;
+  improvedValue.textContent = "+" + Math.max(0, Math.round(improved.improvement * 10) / 10) + " points";
+  careName.textContent = care.role;
+  careValue.textContent = Math.round(care.patientCenteredScore * 10) / 10 + "% safety & trust";
+}
+
+function resetRoleAwards() {
+  roleBaselines = {};
+  const values = [
+    ["highestScoreRole", "Waiting for teams"], ["highestScoreValue", "—"],
+    ["mostImprovedRole", "Waiting for progress"], ["mostImprovedValue", "—"],
+    ["bestCareRole", "Waiting for teams"], ["bestCareValue", "—"]
+  ];
+  values.forEach(([id, text]) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = text;
+  });
 }
 
 function renderLeaderboard(players) {
@@ -112,9 +155,12 @@ function renderLeaderboard(players) {
   const groups = aggregateByRole(players);
 
   if (!groups.length) {
+    resetRoleAwards();
     container.innerHTML = '<div class="leaderboard-empty">Waiting for players in this session to join…</div>';
     return;
   }
+
+  updateRoleAwards(groups);
 
   container.innerHTML = groups.map((group, index) => {
     const rank = index + 1;
@@ -171,6 +217,7 @@ function renderJoinQr() {
 }
 
 function startNewSession() {
+  resetRoleAwards();
   currentSessionId = makeSessionId();
   sessionStorage.setItem("psd_host_session_id", currentSessionId);
   renderJoinQr();
