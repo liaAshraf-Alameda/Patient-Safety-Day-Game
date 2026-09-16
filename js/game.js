@@ -1193,7 +1193,44 @@ function renderStationMap(roleQuestions, question) {
 /**
  * Load a specific question based on player role
  */
+let questionTimerInterval = null;
+let questionSecondsLeft = 30;
+
+function updateQuestionTimer() {
+  const timer = document.getElementById("questionTimer");
+  const value = document.getElementById("questionTimerValue");
+  if (!timer || !value) return;
+  value.textContent = questionSecondsLeft;
+  timer.classList.toggle("warning", questionSecondsLeft <= 10);
+  timer.setAttribute("aria-label", language === "ar" ? questionSecondsLeft + " ثانية متبقية" : questionSecondsLeft + " seconds remaining");
+}
+
+function clearQuestionTimer() {
+  if (questionTimerInterval) {
+    clearInterval(questionTimerInterval);
+    questionTimerInterval = null;
+  }
+}
+
+function startQuestionTimer() {
+  clearQuestionTimer();
+  questionSecondsLeft = 30;
+  updateQuestionTimer();
+  questionTimerInterval = setInterval(() => {
+    questionSecondsLeft--;
+    updateQuestionTimer();
+    if (questionSecondsLeft <= 0) {
+      clearQuestionTimer();
+      const timeoutExplanation = language === "ar"
+        ? "انتهى الوقت. راجع الخيارات واستعد للسؤال التالي."
+        : "Time is up. Review the options and get ready for the next question.";
+      checkAnswer(false, null, timeoutExplanation);
+    }
+  }, 1000);
+}
+
 function loadQuestion() {
+  clearQuestionTimer();
   const avatarDiv = document.getElementById("avatar");
   if (avatarDiv) avatarDiv.classList.remove("state-correct", "state-incorrect");
 
@@ -1243,6 +1280,7 @@ function loadQuestion() {
   });
 
   updateBars();
+  startQuestionTimer();
 }
 
 /**
@@ -1281,6 +1319,7 @@ function showWHOChallengeIntro() {
  * Check the player's answer
  */
 function checkAnswer(correct, buttonElement, explanation) {
+  clearQuestionTimer();
   const allButtons = document.querySelectorAll("#answers button");
   allButtons.forEach(btn => btn.disabled = true);
 
@@ -1297,13 +1336,13 @@ function checkAnswer(correct, buttonElement, explanation) {
   const trans = translations[language];
 
   if (correct) {
-    buttonElement.classList.add("correct");
+    if (buttonElement) buttonElement.classList.add("correct");
     feedbackDiv.classList.add("correct");
     feedbackDiv.innerHTML = trans.correctAnswer + "<br><em>" + explanation + "</em>";
     answeredCorrectly++;
     if (avatarDiv) avatarDiv.classList.add("state-correct");
   } else {
-    buttonElement.classList.add("incorrect");
+    if (buttonElement) buttonElement.classList.add("incorrect");
     feedbackDiv.classList.add("incorrect");
     feedbackDiv.innerHTML = trans.incorrectAnswer + "<br><em>" + explanation + "</em>";
     safetyScore -= 10;
@@ -1318,7 +1357,7 @@ function checkAnswer(correct, buttonElement, explanation) {
     if (avatarDiv) avatarDiv.classList.remove("state-correct", "state-incorrect");
     currentQuestionIndex++;
     loadQuestion();
-  }, 3000);
+  }, 10000);
 }
 
 /**
@@ -1339,6 +1378,7 @@ function updateBars() {
  * End the game and show results
  */
 function endGame() {
+  clearQuestionTimer();
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("gameOverScreen").classList.remove("hidden");
 
