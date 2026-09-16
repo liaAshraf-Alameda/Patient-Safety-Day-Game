@@ -132,7 +132,8 @@
       decide: 'Decide',
       protect: 'Protect',
       tagline: 'Different roles. Same goal. Safer patients.',
-      host: 'Open the live host screen ↗'
+      host: 'Open the live host screen ↗',
+      roleStep: 'STEP 1 OF 1', chooseKicker: 'YOUR SAFETY JOURNEY', chooseTitle: 'Where do you make a difference?', beginRole: 'Begin as Doctor', selectedRole: 'SELECTED ROLE', rolePromise: 'Your choices can make care safer.'
     },
     ar: {
       brand: 'اليوم العالمي لسلامة المرضى',
@@ -154,8 +155,37 @@
       decide: 'قرّر',
       protect: 'احمِ',
       tagline: 'أدوار مختلفة. هدف واحد. مرضى أكثر أماناً.',
-      host: 'افتح شاشة العرض المباشر ↗'
+      host: 'افتح شاشة العرض المباشر ↗',
+      roleStep: 'الخطوة 1 من 1', chooseKicker: 'رحلتك نحو السلامة', chooseTitle: 'أين تصنع الفرق؟', beginRole: 'ابدأ بدور الطبيب', selectedRole: 'الدور المختار', rolePromise: 'اختياراتك تجعل الرعاية أكثر أماناً.'
     }
+  };
+
+  const roleNames = {
+    en: {Doctor:'Doctor',Nurse:'Nurse',Pharmacist:'Pharmacist',Kitchen:'Nutrition',Housekeeping:'Housekeeping',Maintenance:'Maintenance',Administration:'Administration'},
+    ar: {Doctor:'طبيب',Nurse:'تمريض',Pharmacist:'صيدلي',Kitchen:'التغذية',Housekeeping:'النظافة',Maintenance:'الصيانة',Administration:'الإدارة'}
+  };
+  let selectedRoleCard = 'Doctor';
+
+  function updateRoleLanguage(lang) {
+    const names = roleNames[lang] || roleNames.en;
+    document.querySelectorAll('[data-role-label]').forEach(function (element) {
+      element.textContent = names[element.getAttribute('data-role-label')];
+    });
+    const previewName = document.getElementById('rolePreviewName');
+    const startLabel = document.querySelector('#startBtn [data-intro="beginRole"]');
+    if (previewName) previewName.textContent = names[selectedRoleCard];
+    if (startLabel) startLabel.textContent = lang === 'ar' ? 'ابدأ بدور ' + names[selectedRoleCard] : 'Begin as ' + names[selectedRoleCard];
+  }
+
+  window.selectRoleCard = function (role, button) {
+    selectedRoleCard = role;
+    const select = document.getElementById('role');
+    if (select) select.value = role;
+    document.querySelectorAll('.role-card').forEach(function (card) { card.classList.remove('active'); });
+    if (button) button.classList.add('active');
+    const preview = document.getElementById('rolePreviewImage');
+    if (preview && assets[role]) preview.src = assets[role].character;
+    updateRoleLanguage(typeof language === 'string' ? language : 'ar');
   };
 
   function translateIntro(lang) {
@@ -174,6 +204,7 @@
     if (subtitle) subtitle.textContent = copy.subtitle;
     if (mission) mission.textContent = copy.mission;
     if (host) host.textContent = copy.host;
+    updateRoleLanguage(lang);
   }
 
   const oldSetLanguage = window.setLanguage;
@@ -182,6 +213,7 @@
     translateIntro(lang);
   };
 
+  window.selectRoleCard('Doctor', document.querySelector('.role-card[data-role="Doctor"]'));
   translateIntro(typeof language === 'string' ? language : 'ar');
 
 })();
