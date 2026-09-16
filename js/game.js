@@ -8,8 +8,6 @@ let selectedRole = null;
 let isWHOChallenge = false;
 
 let player = {
-  name: "",
-  department: "",
   role: ""
 };
 
@@ -40,8 +38,6 @@ function pushLiveScore(status, extra) {
   const totalQuestions = totalRoleQuestions + (questions["WHOChallenges"] || []).length;
 
   const payload = Object.assign({
-    name: player.name || "",
-    department: player.department || "",
     role: player.role || "",
     safetyScore: Math.max(0, safetyScore),
     trustScore: Math.max(0, trustScore),
@@ -673,8 +669,6 @@ const translations = {
     subTitle: "اليوم العالمي لسلامة المرضى 2026",
     missionText: "ساعد عم سمير على إكمال رحلة آمنة داخل المستشفى",
     regTitle: "بيانات اللاعب",
-    nameLabel: "الاسم",
-    deptLabel: "القسم",
     roleLabel: "الدور الوظيفي",
     startBtn: "دخول اللعبة",
     enterGameBtn: "ابدأ اللعبة",
@@ -696,8 +690,6 @@ const translations = {
     subTitle: "World Patient Safety Day 2026",
     missionText: "Help Mr. Samir complete a safe journey through the hospital.",
     regTitle: "Player Information",
-    nameLabel: "Name",
-    deptLabel: "Department",
     roleLabel: "Role",
     startBtn: "Start Game",
     enterGameBtn: "Start Game",
@@ -747,8 +739,6 @@ function setLanguage(lang) {
   
   if (document.getElementById("regTitle")) {
     document.getElementById("regTitle").innerHTML = trans.regTitle;
-    document.getElementById("nameLabel").innerHTML = trans.nameLabel;
-    document.getElementById("deptLabel").innerHTML = trans.deptLabel;
     document.getElementById("roleLabel").innerHTML = trans.roleLabel;
     document.getElementById("startBtn").innerHTML = trans.startBtn;
   }
@@ -778,16 +768,13 @@ function showRegistration() {
  * Start the game
  */
 function startGame() {
-  player.name = document.getElementById("playerName").value;
-  player.department = document.getElementById("department").value;
   player.role = document.getElementById("role").value;
 
-  if (!player.name || !player.department) {
-    alert(language === "ar" ? "الرجاء ملء جميع الحقول" : "Please fill all fields");
+  if (!player.role) {
+    alert(language === "ar" ? "الرجاء اختيار الدور الوظيفي" : "Please select your role");
     return;
   }
 
-  localStorage.setItem("playerName", player.name);
   localStorage.setItem("playerRole", player.role);
 
   document.getElementById("registrationScreen").classList.add("hidden");
@@ -1030,7 +1017,7 @@ function endGame() {
   const totalQuestions = roleQuestions.length + whoQuestions.length;
   const finalScore = Math.round((answeredCorrectly / totalQuestions) * 100);
   document.getElementById("finalScore").innerHTML = finalScore + "%";
-  document.getElementById("playerInfo").innerHTML = `<strong>${player.name}</strong> - ${player.role} at ${player.department}`;
+  document.getElementById("playerInfo").innerHTML = `<strong>${player.role}</strong>`;
 
   pushLiveScore("finished", { finalScore });
 }

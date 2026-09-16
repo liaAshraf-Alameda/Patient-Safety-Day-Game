@@ -9,7 +9,7 @@ An interactive web-based game designed to educate healthcare professionals about
 - 🌍 **Bilingual Support**: Arabic and English language options
 - 🎮 **Interactive Gameplay**: 11 hospital stations with safety scenarios
 - 📊 **Real-time Scoring**: Track safety score and patient trust metrics
-- 👥 **Player Profile**: Register with name, department, and role
+- 👥 **Player Profile**: Register with your role
 - 📱 **Responsive Design**: Works on desktop, tablet, and mobile devices
 - ✨ **Smooth Animations**: Engaging visual feedback and transitions
 
@@ -43,7 +43,7 @@ Patient-Safety-Day-Game/
 
 ## How to Play
 1. **Welcome Screen**: Choose your language (Arabic/English)
-2. **Registration**: Enter your name, department, and role
+2. **Registration**: Select your role
 3. **Game**: Answer safety questions at each station
 4. **Scoring**: 
    - Correct answers: +1 point, safety maintained
@@ -84,7 +84,7 @@ Patient-Safety-Day-Game/
 - Easy to extend with new stations or questions
 
 ## Live Host Scoreboard
-Open `host.html` on a projector or shared screen during the event to show a live, auto-updating leaderboard of everyone currently playing (name, role/department, current station, safety/trust scores, and status). Each player's browser session pushes its progress to a Firebase Realtime Database as they play (see `js/firebase-config.js`), and `host.html`/`js/host.js` subscribe to it live — no manual refresh needed. A "📺 Open live host screen" link is available on the welcome screen.
+Open `host.html` on a projector or shared screen during the event to show a live, auto-updating leaderboard of everyone currently playing (role, current station, safety/trust scores, and status). Each player's browser session pushes its progress to a Firebase Realtime Database as they play (see `js/firebase-config.js`), and `host.html`/`js/host.js` subscribe to it live — no manual refresh needed. A "📺 Open live host screen" link is available on the welcome screen.
 
 ### Securing the database
 `database.rules.json` (deployed via `firebase.json`) restricts reads/writes to only the `players` path (used by the live scoreboard) and validates the shape of each write; every other path is locked down. Apply these rules with either method:

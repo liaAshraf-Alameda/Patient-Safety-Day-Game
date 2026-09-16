@@ -41,8 +41,7 @@ function renderLeaderboard(players) {
       <div class="leaderboard-row rank-${rank}">
         <div class="leaderboard-rank">#${rank}</div>
         <div class="leaderboard-player">
-          <span class="player-name">${escapeHtml(player.name || "Anonymous")}</span>
-          <span class="player-meta">${escapeHtml(player.role || "")} • ${escapeHtml(player.department || "")}</span>
+          <span class="player-name">${escapeHtml(player.role || "—")}</span>
         </div>
         <div class="leaderboard-station">📍 ${escapeHtml(station)}</div>
         <div class="leaderboard-bar-wrap">
