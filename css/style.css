@@ -577,6 +577,23 @@ option {
   text-align: center;
 }
 
+.host-link {
+  margin-top: 14px;
+}
+
+.host-link a {
+  color: var(--heading);
+  font-size: 13px;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+}
+
+.host-link a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
 .patient-info-card {
   text-align: center;
 }

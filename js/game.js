@@ -14,6 +14,49 @@ let player = {
 };
 
 /**
+ * Live scoreboard (Firebase Realtime Database)
+ * Each browser tab/session gets its own id so the host screen can list every
+ * player independently and update their scores live as the game progresses.
+ */
+function getLiveSessionId() {
+  let id = sessionStorage.getItem("psd_session_id");
+  if (!id) {
+    id = "p_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
+    sessionStorage.setItem("psd_session_id", id);
+  }
+  return id;
+}
+
+const liveSessionId = getLiveSessionId();
+
+/**
+ * Push the player's current progress to Firebase so the live host screen can
+ * display it. Fails silently (logs a warning) if Firebase isn't reachable.
+ */
+function pushLiveScore(status, extra) {
+  if (typeof firebaseDb === "undefined" || !firebaseDb) return;
+
+  const totalRoleQuestions = (questions[selectedRole] || []).length;
+  const totalQuestions = totalRoleQuestions + (questions["WHOChallenges"] || []).length;
+
+  const payload = Object.assign({
+    name: player.name || "",
+    department: player.department || "",
+    role: player.role || "",
+    safetyScore: Math.max(0, safetyScore),
+    trustScore: Math.max(0, trustScore),
+    answeredCorrectly,
+    totalQuestions,
+    status: status || "playing",
+    updatedAt: firebase.database.ServerValue.TIMESTAMP
+  }, extra || {});
+
+  firebaseDb.ref("players/" + liveSessionId).update(payload).catch(err => {
+    console.warn("Live score update failed", err);
+  });
+}
+
+/**
  * Comprehensive question database organized by role
  */
 const questions = {
@@ -645,7 +688,8 @@ const translations = {
     correctAnswer: "✓ إجابة صحيحة! ممتاز!",
     incorrectAnswer: "✗ إجابة خاطئة. تقليل الثقة والسلامة",
     whoChallengeTitle: "🏆 تحديات اليوم العالمي لسلامة المرضى",
-    whoChallengeMessage: "أكملت أسئلتك بنجاح! الآن حان وقت التحدي النهائي!"
+    whoChallengeMessage: "أكملت أسئلتك بنجاح! الآن حان وقت التحدي النهائي!",
+    hostLinkText: "📺 افتح شاشة العرض المباشر"
   },
   en: {
     mainTitle: "🏥 Safe Patient Journey",
@@ -667,7 +711,8 @@ const translations = {
     correctAnswer: "✓ Correct! Excellent!",
     incorrectAnswer: "✗ Incorrect. Safety and trust decreased",
     whoChallengeTitle: "🏆 World Patient Safety Day Challenges",
-    whoChallengeMessage: "You completed your questions successfully! Now it's time for the final challenge!"
+    whoChallengeMessage: "You completed your questions successfully! Now it's time for the final challenge!",
+    hostLinkText: "📺 Open live host screen"
   }
 };
 
@@ -694,6 +739,10 @@ function setLanguage(lang) {
 
   if (document.getElementById("newGameBtn")) {
     document.getElementById("newGameBtn").innerHTML = trans.newGameBtn;
+  }
+
+  if (document.getElementById("hostLinkText")) {
+    document.getElementById("hostLinkText").innerHTML = trans.hostLinkText;
   }
   
   if (document.getElementById("regTitle")) {
@@ -747,6 +796,7 @@ function startGame() {
   selectedRole = player.role;
   currentQuestionIndex = 0;
   isWHOChallenge = false;
+  pushLiveScore("playing");
   loadQuestion();
 }
 
@@ -872,6 +922,7 @@ function loadQuestion() {
 
   applyPlaceTheme(question.station);
   renderStationMap(journeyQuestions, isWHOChallenge ? null : question);
+  pushLiveScore(isWHOChallenge ? "who_challenge" : "playing", { station: question.station });
 
   document.getElementById("currentStation").innerHTML = language === "ar" ? `المحطة: ${question.station}` : `Station: ${question.station}`;
   document.getElementById("questionText").innerHTML = questionTextValue;
@@ -944,6 +995,7 @@ function checkAnswer(correct, buttonElement, explanation) {
   }
 
   updateBars();
+  pushLiveScore(isWHOChallenge ? "who_challenge" : "playing");
 
   setTimeout(() => {
     if (avatarDiv) avatarDiv.classList.remove("state-correct", "state-incorrect");
@@ -979,6 +1031,17 @@ function endGame() {
   const finalScore = Math.round((answeredCorrectly / totalQuestions) * 100);
   document.getElementById("finalScore").innerHTML = finalScore + "%";
   document.getElementById("playerInfo").innerHTML = `<strong>${player.name}</strong> - ${player.role} at ${player.department}`;
+
+  pushLiveScore("finished", { finalScore });
+}
+
+/**
+ * Called by the "New Game" button on the game-over screen: the final score
+ * was already pushed to the live scoreboard in endGame(), so just reload to
+ * start a fresh session.
+ */
+function saveScoreAndReload() {
+  location.reload();
 }
 
 // Initialize with Arabic on page load
