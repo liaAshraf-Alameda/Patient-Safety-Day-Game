@@ -1289,13 +1289,39 @@ function loadQuestion() {
  * Fisher-Yates shuffle of an options array, tracking which shuffled entry is
  * the correct one (by original index) instead of relying on a fixed position.
  */
-function shuffleOptions(options, correctIndex) {
-  const entries = options.map((text, index) => ({ text, isCorrect: index === correctIndex }));
-  for (let i = entries.length - 1; i > 0; i--) {
+let correctPositionBag = [];
+
+function shuffledIndexes(length) {
+  const indexes = Array.from({ length }, (_, index) => index);
+  for (let i = indexes.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [entries[i], entries[j]] = [entries[j], entries[i]];
+    [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
   }
-  return entries;
+  return indexes;
+}
+
+function nextCorrectPosition(optionCount) {
+  if (!correctPositionBag.length || correctPositionBag.some(index => index >= optionCount)) {
+    correctPositionBag = shuffledIndexes(optionCount);
+  }
+  return correctPositionBag.pop();
+}
+
+function shuffleOptions(options, correctIndex) {
+  const correctEntry = { text: options[correctIndex], isCorrect: true };
+  const incorrectEntries = options
+    .filter((_, index) => index !== correctIndex)
+    .map(text => ({ text, isCorrect: false }));
+
+  for (let i = incorrectEntries.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [incorrectEntries[i], incorrectEntries[j]] = [incorrectEntries[j], incorrectEntries[i]];
+  }
+
+  const correctPosition = nextCorrectPosition(options.length);
+  const result = incorrectEntries.slice();
+  result.splice(correctPosition, 0, correctEntry);
+  return result;
 }
 
 /**
