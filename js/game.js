@@ -430,44 +430,77 @@ const questions = {
 // Language translations
 const translations = {
   ar: {
-    mainTitle: "🏥 رحلة المريض الآمنة",
+    browserTitle: "لعبة رحلة المريض الآمنة",
+    mainTitle: "🏥 لعبة رحلة المريض الآمنة",
     subTitle: "اليوم العالمي لسلامة المرضى 2026",
     missionText: "ساعد عم سمير على إكمال رحلة آمنة داخل المستشفى",
     regTitle: "بيانات اللاعب",
     nameLabel: "الاسم",
+    namePlaceholder: "اكتب اسمك",
     deptLabel: "القسم",
+    deptPlaceholder: "اكتب القسم",
     roleLabel: "الدور الوظيفي",
     startBtn: "دخول اللعبة",
     patientName: "عم سمير",
     safetyLabel: "درجة السلامة",
     trustLabel: "ثقة المريض",
-    journeyTitle: "🏥 رحلة عم سمير",
+    journeyTitle: "🏥 رحلة عم سمير الآمنة",
+    currentStationLabel: "المحطة الحالية",
+    questionPlaceholder: "سيتم تحميل السؤال هنا",
     gameOverTitle: "تم إكمال اللعبة!",
     finalMessage: "شكراً لك على مساعدتك لعم سمير على إكمال رحلة آمنة!",
+    playAgainBtn: "لعبة جديدة",
     correctAnswer: "✓ إجابة صحيحة! ممتاز!",
     incorrectAnswer: "✗ إجابة خاطئة. تقليل الثقة والسلامة",
     whoChallengeTitle: "🏆 تحديات اليوم العالمي لسلامة المرضى",
     whoChallengeMessage: "أكملت أسئلتك بنجاح! الآن حان وقت التحدي النهائي!"
   },
   en: {
-    mainTitle: "🏥 Safe Patient Journey",
+    browserTitle: "Safe Patient Journey Game",
+    mainTitle: "🏥 Safe Patient Journey Game",
     subTitle: "World Patient Safety Day 2026",
     missionText: "Help Mr. Samir complete a safe journey through the hospital.",
     regTitle: "Player Information",
     nameLabel: "Name",
+    namePlaceholder: "Enter your name",
     deptLabel: "Department",
+    deptPlaceholder: "Enter your department",
     roleLabel: "Role",
     startBtn: "Start Game",
     patientName: "Mr. Samir",
     safetyLabel: "Patient Safety Score",
     trustLabel: "Patient Trust",
-    journeyTitle: "🏥 Mr. Samir's Journey",
+    journeyTitle: "🏥 Mr. Samir's Safe Journey",
+    currentStationLabel: "Current Station",
+    questionPlaceholder: "The question will appear here",
     gameOverTitle: "Game Complete!",
     finalMessage: "Thank you for helping Mr. Samir complete a safe hospital journey!",
+    playAgainBtn: "Play Again",
     correctAnswer: "✓ Correct! Excellent!",
     incorrectAnswer: "✗ Incorrect. Safety and trust decreased",
     whoChallengeTitle: "🏆 World Patient Safety Day Challenges",
     whoChallengeMessage: "You completed your questions successfully! Now it's time for the final challenge!"
+  }
+};
+
+const roleLabels = {
+  ar: {
+    Doctor: "👨‍⚕️ طبيب",
+    Nurse: "👩‍⚕️ ممرض/ممرضة",
+    Pharmacist: "💊 صيدلي",
+    Kitchen: "🍲 التغذية",
+    Housekeeping: "🧹 النظافة",
+    Maintenance: "🔧 الصيانة",
+    Administration: "📋 الإدارة"
+  },
+  en: {
+    Doctor: "👨‍⚕️ Doctor",
+    Nurse: "👩‍⚕️ Nurse",
+    Pharmacist: "💊 Pharmacist",
+    Kitchen: "🍲 Kitchen",
+    Housekeeping: "🧹 Housekeeping",
+    Maintenance: "🔧 Maintenance",
+    Administration: "📋 Administration"
   }
 };
 
@@ -482,8 +515,10 @@ function setLanguage(lang) {
   } else {
     document.documentElement.dir = "rtl";
   }
+  document.documentElement.lang = lang;
 
   const trans = translations[lang];
+  document.title = trans.browserTitle;
   document.getElementById("mainTitle").innerHTML = trans.mainTitle;
   document.getElementById("subTitle").innerHTML = trans.subTitle;
   document.getElementById("missionText").innerHTML = trans.missionText;
@@ -491,9 +526,12 @@ function setLanguage(lang) {
   if (document.getElementById("regTitle")) {
     document.getElementById("regTitle").innerHTML = trans.regTitle;
     document.getElementById("nameLabel").innerHTML = trans.nameLabel;
+    document.getElementById("playerName").placeholder = trans.namePlaceholder;
     document.getElementById("deptLabel").innerHTML = trans.deptLabel;
+    document.getElementById("department").placeholder = trans.deptPlaceholder;
     document.getElementById("roleLabel").innerHTML = trans.roleLabel;
     document.getElementById("startBtn").innerHTML = trans.startBtn;
+    updateRoleOptions(lang);
   }
 
   if (document.getElementById("patientName")) {
@@ -501,12 +539,32 @@ function setLanguage(lang) {
     document.getElementById("safetyLabel").innerHTML = trans.safetyLabel;
     document.getElementById("trustLabel").innerHTML = trans.trustLabel;
     document.getElementById("journeyTitle").innerHTML = trans.journeyTitle;
+    if (!document.getElementById("gameScreen").classList.contains("hidden")) {
+      loadQuestion();
+    } else {
+      document.getElementById("currentStation").innerHTML = trans.currentStationLabel;
+      document.getElementById("questionText").innerHTML = trans.questionPlaceholder;
+    }
   }
 
   if (document.getElementById("gameOverTitle")) {
     document.getElementById("gameOverTitle").innerHTML = trans.gameOverTitle;
     document.getElementById("finalMessage").innerHTML = trans.finalMessage;
+    document.getElementById("playAgainBtn").innerHTML = trans.playAgainBtn;
   }
+}
+
+function updateRoleOptions(lang) {
+  document.querySelectorAll("#role option").forEach(option => {
+    option.textContent = roleLabels[lang][option.value] || option.value;
+  });
+}
+
+function getPlayerInfoText() {
+  const roleLabel = roleLabels[language][player.role] || player.role;
+  return language === "ar"
+    ? `<strong>${player.name}</strong> - ${roleLabel} في ${player.department}`
+    : `<strong>${player.name}</strong> - ${roleLabel} in ${player.department}`;
 }
 
 /**
@@ -584,6 +642,7 @@ function loadQuestion() {
 function showWHOChallengeIntro() {
   const trans = translations[language];
   const feedbackDiv = document.getElementById("feedback");
+  feedbackDiv.classList.remove("correct", "incorrect");
   feedbackDiv.classList.add("correct");
   feedbackDiv.innerHTML = `<h2>${trans.whoChallengeTitle}</h2><p>${trans.whoChallengeMessage}</p>`;
   
@@ -656,7 +715,11 @@ function endGame() {
   const totalQuestions = roleQuestions.length + whoQuestions.length;
   const finalScore = Math.round((answeredCorrectly / totalQuestions) * 100);
   document.getElementById("finalScore").innerHTML = finalScore + "%";
-  document.getElementById("playerInfo").innerHTML = `<strong>${player.name}</strong> - ${player.role} at ${player.department}`;
+  document.getElementById("playerInfo").innerHTML = getPlayerInfoText();
+}
+
+function saveScoreAndReload() {
+  location.reload();
 }
 
 // Initialize with Arabic on page load
