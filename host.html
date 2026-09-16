@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Safe Patient Journey — Live Scoreboard</title>
-  <link rel="stylesheet" href="css/host.css?v=20260916c">
+  <link rel="stylesheet" href="css/host.css?v=20260916d">
 </head>
 <body class="host-body">
   <div class="host-orb host-orb-one"></div>
@@ -48,6 +48,11 @@
       </section>
 
       <section class="scoreboard-section">
+        <div class="role-awards" id="roleAwards">
+          <article class="role-award award-score"><div class="award-symbol">🏆</div><div><span>HIGHEST-SCORING ROLE</span><strong id="highestScoreRole">Waiting for teams</strong><small id="highestScoreValue">—</small></div></article>
+          <article class="role-award award-improved"><div class="award-symbol">↗</div><div><span>MOST-IMPROVED ROLE</span><strong id="mostImprovedRole">Waiting for progress</strong><small id="mostImprovedValue">—</small></div></article>
+          <article class="role-award award-care"><div class="award-symbol">♡</div><div><span>BEST PATIENT-CENTERED CARE</span><strong id="bestCareRole">Waiting for teams</strong><small id="bestCareValue">—</small></div></article>
+        </div>
         <div class="scoreboard-heading">
           <div><span>REAL-TIME RESULTS</span><h2>Team Scoreboard</h2></div>
           <p>Scores update automatically as teams progress through the patient-safety journey.</p>
@@ -65,6 +70,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="js/firebase-config.js?v=20260916b"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1/build/qrcode.min.js"></script>
-  <script src="js/host.js?v=20260916c"></script>
+  <script src="js/host.js?v=20260916d"></script>
 </body>
 </html>
