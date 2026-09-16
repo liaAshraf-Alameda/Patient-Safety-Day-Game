@@ -1201,6 +1201,8 @@ function updateQuestionTimer() {
   const value = document.getElementById("questionTimerValue");
   if (!timer || !value) return;
   value.textContent = questionSecondsLeft;
+  const unit = document.getElementById("questionTimerUnit");
+  if (unit) unit.textContent = language === "ar" ? "ث" : "SEC";
   timer.classList.toggle("warning", questionSecondsLeft <= 10);
   timer.setAttribute("aria-label", language === "ar" ? questionSecondsLeft + " ثانية متبقية" : questionSecondsLeft + " seconds remaining");
 }
