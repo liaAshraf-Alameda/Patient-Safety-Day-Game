@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safe Patient Journey — Live Scoreboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/host.css">
+</head>
+
+<body class="host-body">
+
+  <div class="host-header">
+    <h1>🏥 Safe Patient Journey — Live Scoreboard</h1>
+    <span class="host-live-badge"><span class="host-live-dot"></span>LIVE</span>
+  </div>
+
+  <div class="join-panel" id="joinPanel">
+    <canvas id="joinQrCode"></canvas>
+    <div class="join-panel-text">
+      <h2>📱 Scan to Join</h2>
+      <p id="joinUrlText">Loading link…</p>
+    </div>
+  </div>
+
+  <div class="leaderboard" id="leaderboard">
+    <div class="leaderboard-empty">Waiting for players to join…</div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+
+  <!-- QR Code Library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1/build/qrcode.min.js"></script>
+
+  <!-- Host Script -->
+  <script src="js/host.js"></script>
+</body>
+
+</html>

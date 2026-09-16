@@ -16,11 +16,15 @@ An interactive web-based game designed to educate healthcare professionals about
 ## Project Structure
 ```
 Patient-Safety-Day-Game/
-├── index.html          # Main HTML file
+├── index.html          # Main game HTML file
+├── host.html           # Live scoreboard (host/big-screen) view
 ├── css/
-│   └── style.css       # Stylesheet
+│   ├── style.css       # Main stylesheet
+│   └── host.css         # Host/scoreboard-specific styles
 ├── js/
-│   └── game.js         # Game logic and functionality
+│   ├── game.js          # Game logic and functionality
+│   ├── firebase-config.js  # Firebase project config + init
+│   └── host.js           # Live scoreboard rendering logic
 └── README.md           # This file
 ```
 
@@ -59,6 +63,7 @@ Patient-Safety-Day-Game/
 - **CSS3**: Responsive design with animations
 - **Vanilla JavaScript**: Pure JS, no frameworks
 - **LocalStorage**: Player data persistence
+- **Firebase Realtime Database**: Live score sync for the host scoreboard
 
 ## Browser Compatibility
 - Chrome/Edge 88+
@@ -78,8 +83,17 @@ Patient-Safety-Day-Game/
 - Clean, modular JavaScript with JSDoc comments
 - Easy to extend with new stations or questions
 
+## Live Host Scoreboard
+Open `host.html` on a projector or shared screen during the event to show a live, auto-updating leaderboard of everyone currently playing (name, role/department, current station, safety/trust scores, and status). Each player's browser session pushes its progress to a Firebase Realtime Database as they play (see `js/firebase-config.js`), and `host.html`/`js/host.js` subscribe to it live — no manual refresh needed. A "📺 Open live host screen" link is available on the welcome screen.
+
+### Securing the database
+`database.rules.json` (deployed via `firebase.json`) restricts reads/writes to only the `players` path (used by the live scoreboard) and validates the shape of each write; every other path is locked down. Apply these rules with either method:
+- **Firebase Console**: open your project → Build → Realtime Database → Rules tab → paste the contents of `database.rules.json` → Publish.
+- **Firebase CLI**: `npm install -g firebase-tools`, then `firebase login`, then from this folder run `firebase deploy --only database` (using project `patient-safety-day-game`).
+
+Note: since the game has no user accounts, any visitor with the site's Firebase config can still write to the `players` path (this is required for the no-login live scoreboard to work). The rules only prevent access to unrelated database paths and malformed payloads — they don't add per-player authentication.
+
 ## Future Enhancements
-- Leaderboard system
 - Multiple difficulty levels
 - Timed challenges
 - More hospital departments
