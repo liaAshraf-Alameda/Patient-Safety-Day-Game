@@ -1468,7 +1468,7 @@ function endGame() {
     : {Doctor:"Doctor",Nurse:"Nurse",Pharmacist:"Pharmacist",Kitchen:"Nutrition",Housekeeping:"Housekeeping",Maintenance:"Maintenance",Administration:"Administration"};
   const scoreElement = document.getElementById("finalScore");
   scoreElement.innerHTML = finalScore + "%";
-  scoreElement.parentElement.style.setProperty("--score", finalScore * 3.6 + "deg");
+  scoreElement.closest(".score-ring").style.setProperty("--score", finalScore * 3.6 + "deg");
   document.getElementById("playerInfo").innerHTML = `<span>${language === "ar" ? "الدور" : "ROLE"}</span><strong>${roleLabels[selectedRole] || selectedRole}</strong>`;
   document.getElementById("resultLevel").textContent = advice.level;
   document.getElementById("resultCorrect").textContent = answeredCorrectly + " / " + totalQuestions;
